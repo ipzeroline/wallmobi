@@ -6,6 +6,7 @@ import { site } from "@/lib/site";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DetailsCloseHandler from "@/components/DetailsCloseHandler";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Script from "next/script";
 
 export function generateStaticParams() {
@@ -120,6 +121,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body>
+        <GoogleAnalytics />
         <DetailsCloseHandler />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Header locale={l} dict={dict} />

@@ -168,7 +168,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <p className="eyebrow">{blogSectionEyebrow[l]}</p>
           <h2 className="h2">{blogSectionTitle[l]}</h2>
         </div>
-        <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
+        <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" }}>
           {latestPosts.map((post) => (
             <Link
               key={post.slug}

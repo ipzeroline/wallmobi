@@ -620,7 +620,7 @@ export default function MemberPage() {
                     return (
                       <div key={slug} style={{ display: "flex", flexDirection: "column", background: "var(--bg-alt)", border: "1px solid var(--line)", borderRadius: "16px", overflow: "hidden" }}>
                         <Link href={`/${l}/${wp.category}-wallpapers/${wp.slug}`} style={{ display: "block", aspectRatio: "1080/2340", position: "relative", overflow: "hidden" }}>
-                          <Image src={wp.src} alt={wp.title} fill style={{ objectFit: "cover", transition: "transform 0.3s" }} className="hover-zoom-img" />
+                          <Image src={wp.src} alt={wp.title} fill sizes="(max-width: 560px) 45vw, 160px" style={{ objectFit: "cover", transition: "transform 0.3s" }} className="hover-zoom-img" />
                         </Link>
                         <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "6px" }}>
                           <div style={{ fontSize: "0.85rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-1)" }}>
@@ -674,7 +674,7 @@ export default function MemberPage() {
                               <td style={{ padding: "12px 16px" }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                   <div style={{ width: "32px", height: "55px", position: "relative", borderRadius: "6px", overflow: "hidden", border: "1px solid var(--line)" }}>
-                                    <Image src={wp.src} alt={wp.title} fill style={{ objectFit: "cover" }} />
+                                    <Image src={wp.src} alt={wp.title} fill sizes="90px" style={{ objectFit: "cover" }} />
                                   </div>
                                   <div>
                                     <Link href={`/${l}/${wp.category}-wallpapers/${wp.slug}`} style={{ fontWeight: 600, color: "var(--text-1)", textDecoration: "none" }}>

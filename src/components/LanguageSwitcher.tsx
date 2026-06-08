@@ -97,8 +97,8 @@ export default function LanguageSwitcher({ current }: { current: Locale }) {
         <span style={flagStyle}>
           <Flag l={current} />
         </span>
-        <span>{localeNames[current]}</span>
-        <svg width="10" height="10" viewBox="0 0 10 6" aria-hidden="true" style={{ marginLeft: "0.1rem" }}>
+        <span className="lang-current-label">{localeNames[current]}</span>
+        <svg className="lang-current-chevron" width="10" height="10" viewBox="0 0 10 6" aria-hidden="true" style={{ marginLeft: "0.1rem" }}>
           <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" />
         </svg>
       </summary>

@@ -395,8 +395,8 @@ export default function AdminDashboard() {
 
   if (!currentUser) {
     return (
-      <section className="container section" style={{ maxWidth: "500px", margin: "3rem auto", textAlign: "center" }}>
-        <div style={{ background: "var(--bg-alt)", padding: "3rem 2rem", borderRadius: "20px", border: "1px solid var(--line)" }}>
+      <section className="container section admin-denied" style={{ maxWidth: "500px", margin: "3rem auto", textAlign: "center" }}>
+        <div className="admin-denied-card" style={{ background: "var(--bg-alt)", padding: "3rem 2rem", borderRadius: "20px", border: "1px solid var(--line)" }}>
           <h1 style={{ color: "#ff453a", marginBottom: "1rem" }}>Access Denied</h1>
           <p style={{ color: "var(--text-2)", marginBottom: "2rem" }}>
             You do not have permissions to access the Admin Panel. Please sign in with an Admin account.
@@ -410,17 +410,17 @@ export default function AdminDashboard() {
   }
 
   return (
-    <section className="container section" style={{ maxWidth: "1100px", margin: "0 auto" }}>
+    <section className="container section admin-console" style={{ maxWidth: "1100px", margin: "0 auto" }}>
       {/* Header Panel */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--line)", paddingBottom: "1.5rem", marginBottom: "1.5rem" }}>
+      <div className="admin-console-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--line)", paddingBottom: "1.5rem", marginBottom: "1.5rem" }}>
         <div>
-          <h1 className="h2" style={{ margin: 0 }}>⚙️ Management Console</h1>
+          <h1 className="h2" style={{ margin: 0 }}>⚙️ Admin</h1>
           <p style={{ color: "var(--text-2)", fontSize: "0.95rem", marginTop: "4px" }}>
-            Logged in as <strong>{currentUser.name}</strong> ({currentUser.role === "super_admin" ? "Super Admin" : "Staff"})
+            <strong>{currentUser.name}</strong> · {currentUser.role === "super_admin" ? "Super Admin" : "Staff"}
           </p>
         </div>
         <Link href={`/${locale}/member`} className="btn btn-soft" style={{ padding: "0.6rem 1.2rem", borderRadius: "10px" }}>
-          Go to Member Dashboard
+          Member
         </Link>
       </div>
 
@@ -429,7 +429,7 @@ export default function AdminDashboard() {
       {successMsg && <div style={{ background: "rgba(52, 199, 89, 0.1)", border: "1px solid rgba(52, 199, 89, 0.3)", color: "#30d158", padding: "12px 16px", borderRadius: "10px", marginBottom: "1.2rem", fontSize: "0.92rem" }}>{successMsg}</div>}
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: "8px", borderBottom: "1px solid var(--line)", paddingBottom: "12px", marginBottom: "1.8rem" }}>
+      <div className="admin-tabs" style={{ display: "flex", gap: "8px", borderBottom: "1px solid var(--line)", paddingBottom: "12px", marginBottom: "1.8rem" }}>
         <button
           className={`chip ${activeTab === "overview" ? "active" : ""}`}
           onClick={() => { setActiveTab("overview"); setErrorMsg(""); setSuccessMsg(""); }}
@@ -506,7 +506,7 @@ export default function AdminDashboard() {
 
       {/* 🖼️ B. TAB: WALLPAPERS */}
       {activeTab === "wallpapers" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "2rem", alignItems: "start" }}>
+        <div className="admin-two-col" style={{ display: "grid", gap: "2rem", alignItems: "start" }}>
           {/* Wallpapers List */}
           <div style={{ background: "var(--bg-alt)", border: "1px solid var(--line)", borderRadius: "20px", overflow: "hidden" }}>
             {/* Filter Bar */}
@@ -706,7 +706,7 @@ export default function AdminDashboard() {
 
       {/* 👥 C. TAB: USER & STAFF MANAGEMENT (SUPER ADMIN ONLY) */}
       {activeTab === "users" && currentUser.role === "super_admin" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "2rem", alignItems: "start" }}>
+        <div className="admin-two-col" style={{ display: "grid", gap: "2rem", alignItems: "start" }}>
           {/* Users List */}
           <div style={{ background: "var(--bg-alt)", border: "1px solid var(--line)", borderRadius: "20px", overflow: "hidden" }}>
             {/* Search Input */}

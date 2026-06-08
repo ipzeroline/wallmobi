@@ -206,7 +206,7 @@ export default function BlogSearchList({ posts, locale, siteName }: BlogSearchLi
       ) : (
         /* Blog Grid */
         <div>
-          <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}>
+          <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))" }}>
             {currentPosts.map((post) => (
               <Link
                 key={post.slug}
