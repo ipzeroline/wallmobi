@@ -8,22 +8,59 @@ export function hashPassword(password: string): string {
   return crypto.pbkdf2Sync(password, salt, 10000, 64, "sha512").toString("hex");
 }
 
-// Retrieves the authenticated user and validates session token in database
+const ADMIN_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+const MEMBER_TIMEOUT = 2 * 60 * 60 * 1000; // 2 hours
+
+// Retrieves the authenticated user, validates and extends session timeout (sliding expiration)
 export async function getSessionUser() {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("wallmobi_session")?.value;
+  const rawSessionToken = cookieStore.get("wallmobi_session")?.value;
 
-  if (!sessionToken) return null;
+  if (!rawSessionToken) return null;
 
+  const sessionToken = decodeURIComponent(rawSessionToken);
+
+  // Parse expiration from session token
+  const parts = sessionToken.split("|");
+  const token = parts[0];
+  const expiresAt = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+
+  if (Date.now() > expiresAt) {
+    // Session expired: invalidate in database and clear cookie
+    await pool.query("UPDATE users SET current_session_token = NULL WHERE current_session_token = ?", [token]);
+    cookieStore.delete("wallmobi_session");
+    return null;
+  }
+
+  // Look up user by the static token UUID (no race condition since UUID is static in DB)
   const [rows] = await pool.query(
     "SELECT id, name, email, role, current_session_token FROM users WHERE current_session_token = ?",
-    [sessionToken]
+    [token]
   );
 
   const user = (rows as any)[0];
   if (!user) {
     // Session token invalid (logged in on another device/concurrent login detected)
     return null;
+  }
+
+  // Session is valid: extend expiration (sliding window) on cookie only
+  const isAdmin = user.role === "super_admin" || user.role === "staff";
+  const timeout = isAdmin ? ADMIN_TIMEOUT : MEMBER_TIMEOUT;
+  const newExpiresAt = Date.now() + timeout;
+  const newSessionValue = `${token}|${newExpiresAt}`;
+
+  try {
+    cookieStore.set("wallmobi_session", newSessionValue, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: Math.floor(timeout / 1000),
+      path: "/",
+    });
+  } catch {
+    // Next.js throws an error when attempting to modify cookies in a GET route handler or during SSR.
+    // Swallowing it is safe; the cookie will be extended on the next mutation (POST/PUT/DELETE) request.
   }
 
   return {
@@ -36,22 +73,37 @@ export async function getSessionUser() {
 
 // Establishes a session, overwriting any previous token to prevent concurrent logins
 export async function setSession(userId: number) {
-  const sessionToken = crypto.randomUUID();
+  const [userRows] = await pool.query("SELECT role FROM users WHERE id = ?", [userId]);
+  const role = (userRows as any)[0]?.role || "member";
+
+  const isAdmin = role === "super_admin" || role === "staff";
+  const timeout = isAdmin ? ADMIN_TIMEOUT : MEMBER_TIMEOUT;
+  const token = crypto.randomUUID();
+  const expiresAt = Date.now() + timeout;
+  const sessionToken = `${token}|${expiresAt}`;
   
-  await pool.query("UPDATE users SET current_session_token = ? WHERE id = ?", [sessionToken, userId]);
+  // Store only the static UUID token in the database to prevent write races on subsequent reads
+  await pool.query("UPDATE users SET current_session_token = ? WHERE id = ?", [token, userId]);
 
   const cookieStore = await cookies();
   cookieStore.set("wallmobi_session", sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 1 week
+    maxAge: Math.floor(timeout / 1000),
     path: "/",
   });
 }
 
-// Deletes the session cookie
+// Deletes the session cookie and invalidates it in the database
 export async function clearSession() {
   const cookieStore = await cookies();
+  const rawSessionToken = cookieStore.get("wallmobi_session")?.value;
+  if (rawSessionToken) {
+    const sessionToken = decodeURIComponent(rawSessionToken);
+    const parts = sessionToken.split("|");
+    const token = parts[0];
+    await pool.query("UPDATE users SET current_session_token = NULL WHERE current_session_token = ?", [token]);
+  }
   cookieStore.delete("wallmobi_session");
 }
