@@ -4,7 +4,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { alternates } from "@/lib/seo";
 import { getDbWallpapers } from "@/lib/db-wallpapers";
-import WallpaperCard from "@/components/WallpaperCard";
+import GalleryGrid from "@/components/GalleryGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -39,11 +39,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
         <p className="eyebrow">{dict.gallery.eyebrow}</p>
         <h1 className="h2">{dict.gallery.title}</h1>
       </div>
-      <div className="grid">
-        {shuffled.map((wp, i) => (
-          <WallpaperCard key={wp.slug} wp={wp} locale={l} dict={dict} priority={i < 5} />
-        ))}
-      </div>
+      <GalleryGrid wallpapers={shuffled} locale={l} dict={dict} />
     </section>
   );
 }

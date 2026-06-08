@@ -110,7 +110,8 @@ export default async function LocaleLayout({
 
   return (
     <html lang={localeHtmlLang[l]} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <head>
+      <head />
+      <body>
         <Script
           id="theme-initializer"
           strategy="beforeInteractive"
@@ -119,8 +120,6 @@ export default async function LocaleLayout({
               "(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t='light';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}})();",
           }}
         />
-      </head>
-      <body>
         <GoogleAnalytics />
         <DetailsCloseHandler />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

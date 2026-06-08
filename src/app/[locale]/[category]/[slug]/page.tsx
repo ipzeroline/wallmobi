@@ -12,6 +12,7 @@ import WallpaperCard from "@/components/WallpaperCard";
 import DownloadButton from "@/components/DownloadButton";
 import FullscreenPreview from "@/components/FullscreenPreview";
 import FavoriteButton from "@/components/FavoriteButton";
+import WallpaperViewCounter from "@/components/WallpaperViewCounter";
 
 function absoluteImageUrl(src: string) {
   return /^https?:\/\//i.test(src) ? src : `${site.url}${src}`;
@@ -82,6 +83,15 @@ export async function generateMetadata({
     twitter: { card: "summary_large_image", title, description: desc, images: [absoluteImageUrl(wp.src)] },
   };
 }
+
+const publishedLabel: Record<Locale, string> = {
+  en: "Published",
+  th: "วันที่เผยแพร่",
+  vi: "Ngày đăng",
+  my: "တင်သည့်ရက်စွဲ",
+  lo: "ວັນທີເຜີຍແຜ່",
+  km: "កាលបរិច្ឆេទផ្សាយ",
+};
 
 export default async function WallpaperPage({
   params,
@@ -237,7 +247,23 @@ export default async function WallpaperPage({
           <dl className="specs">
             <div className="spec"><dt>{dict.detail.resolution}</dt><dd>{wp.width} × {wp.height}</dd></div>
             <div className="spec"><dt>{dict.detail.downloads}</dt><dd>{formatDownloads(wp.downloads)}</dd></div>
+            <div className="spec">
+              <dt>
+                {l === "th" ? "คนเข้าชม" : 
+                 l === "vi" ? "Lượt xem" :
+                 l === "my" ? "ကြည့်ရှုသူ" :
+                 l === "lo" ? "ຄົນເຂົ້າຊົມ" :
+                 l === "km" ? "អ្នកមើល" : "Views"}
+              </dt>
+              <dd>
+                <WallpaperViewCounter slug={wp.slug} />
+              </dd>
+            </div>
             <div className="spec"><dt>{dict.detail.format}</dt><dd>{wp.src.endsWith(".png") ? "PNG" : "SVG"}</dd></div>
+            <div className="spec">
+              <dt>{publishedLabel[l]}</dt>
+              <dd>{wp.published}</dd>
+            </div>
             <div className="spec"><dt>{dict.detail.license}</dt><dd>{dict.detail.licenseValue}</dd></div>
           </dl>
 
