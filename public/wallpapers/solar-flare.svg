@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2340" viewBox="0 0 1080 2340"><defs>
+    <radialGradient id="g1" cx="28%" cy="22%" r="75%">
+      <stop offset="0%" stop-color="#ffd56b" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#e07a1f" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1a0d00" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g2" cx="78%" cy="82%" r="80%">
+      <stop offset="0%" stop-color="#7a3b00" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#1a0d00" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#1a0d00" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#1a0d00"/><stop offset="100%" stop-color="#7a3b00"/></linearGradient>
+  </defs>
+  <rect width="1080" height="2340" fill="url(#base)"/>
+  <rect width="1080" height="2340" fill="url(#g1)"/>
+  <rect width="1080" height="2340" fill="url(#g2)"/><circle cx="540" cy="982.8" r="110" fill="none" stroke="#ffd56b" stroke-opacity="0.050" stroke-width="2"/><circle cx="540" cy="982.8" r="230" fill="none" stroke="#ffd56b" stroke-opacity="0.060" stroke-width="2"/><circle cx="540" cy="982.8" r="350" fill="none" stroke="#ffd56b" stroke-opacity="0.070" stroke-width="2"/><circle cx="540" cy="982.8" r="470" fill="none" stroke="#ffd56b" stroke-opacity="0.080" stroke-width="2"/><circle cx="540" cy="982.8" r="590" fill="none" stroke="#ffd56b" stroke-opacity="0.090" stroke-width="2"/><circle cx="540" cy="982.8" r="710" fill="none" stroke="#ffd56b" stroke-opacity="0.100" stroke-width="2"/><circle cx="540" cy="982.8" r="830" fill="none" stroke="#ffd56b" stroke-opacity="0.110" stroke-width="2"/><circle cx="540" cy="982.8" r="950" fill="none" stroke="#ffd56b" stroke-opacity="0.120" stroke-width="2"/><circle cx="540" cy="982.8" r="1070" fill="none" stroke="#ffd56b" stroke-opacity="0.130" stroke-width="2"/><circle cx="540" cy="982.8" r="1190" fill="none" stroke="#ffd56b" stroke-opacity="0.140" stroke-width="2"/><circle cx="540" cy="982.8" r="1310" fill="none" stroke="#ffd56b" stroke-opacity="0.150" stroke-width="2"/><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="1080" height="2340" filter="url(#n)" opacity="0.04"/></svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0f" />
+      <stop offset="100%" stop-color="#151522" />
+    </linearGradient>
+    <linearGradient id="workGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+  <rect width="800" height="400" fill="url(#bgGrad)" />
+  
+  <!-- Desk line -->
+  <line x1="100" y1="280" x2="700" y2="280" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+  
+  <!-- Stylized Laptop Mockup -->
+  <g transform="translate(180, 100)" filter="url(#shadow)">
+    <!-- Screen Bezel -->
+    <rect x="0" y="0" width="260" height="160" rx="8" fill="#1e293b" />
+    <rect x="6" y="6" width="248" height="140" rx="4" fill="#0b0f17" />
+    <!-- Wallpaper artwork (Clean, calming lines) -->
+    <path d="M10,120 Q130,40 238,120" fill="none" stroke="url(#workGrad)" stroke-width="4.5" opacity="0.9" />
+    <circle cx="130" cy="80" r="25" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-width="1.5" />
+    
+    <!-- Keyboard Base -->
+    <path d="M-20,160 L280,160 L290,172 L-30,172 Z" fill="#334155" />
+    <rect x="110" y="165" width="40" height="4" rx="2" fill="#1e293b" />
+  </g>
+
+  <!-- Stylized plant pot on the desk -->
+  <g transform="translate(500, 160)">
+    <!-- Pot -->
+    <path d="M15,90 L35,90 L40,112 L10,112 Z" fill="#334155" />
+    <!-- Leaves -->
+    <path d="M25,90 Q10,70 15,50 C20,70 25,90 25,90 Z" fill="#059669" />
+    <path d="M25,90 Q40,75 35,55 C30,75 25,90 25,90 Z" fill="#10b981" />
+  </g>
+  
+  <text x="50%" y="350" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="sans-serif" font-size="11" letter-spacing="4">PRODUCTIVE DIGITAL WORKSPACE</text>
+</svg>

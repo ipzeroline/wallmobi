@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2340" viewBox="0 0 1080 2340"><defs>
+    <radialGradient id="g1" cx="28%" cy="22%" r="75%">
+      <stop offset="0%" stop-color="#6b6d78" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#33343a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#050505" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g2" cx="78%" cy="82%" r="80%">
+      <stop offset="0%" stop-color="#1a1a1d" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#050505" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#050505" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#050505"/><stop offset="100%" stop-color="#1a1a1d"/></linearGradient>
+  </defs>
+  <rect width="1080" height="2340" fill="url(#base)"/>
+  <rect width="1080" height="2340" fill="url(#g1)"/>
+  <rect width="1080" height="2340" fill="url(#g2)"/><path d="M0 200 C 300 80, 800 340, 1080 150 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.050"/><path d="M0 450 C 300 330, 800 590, 1080 400 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.080"/><path d="M0 700 C 300 580, 800 840, 1080 650 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.110"/><path d="M0 950 C 300 830, 800 1090, 1080 900 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.050"/><path d="M0 1200 C 300 1080, 800 1340, 1080 1150 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.080"/><path d="M0 1450 C 300 1330, 800 1590, 1080 1400 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.110"/><path d="M0 1700 C 300 1580, 800 1840, 1080 1650 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.050"/><path d="M0 1950 C 300 1830, 800 2090, 1080 1900 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.080"/><path d="M0 2200 C 300 2080, 800 2340, 1080 2150 L1080 2340 L0 2340 Z" fill="#33343a" fill-opacity="0.110"/><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="1080" height="2340" filter="url(#n)" opacity="0.04"/></svg>

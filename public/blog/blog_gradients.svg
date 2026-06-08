@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080710" />
+      <stop offset="100%" stop-color="#140f24" />
+    </linearGradient>
+    <radialGradient id="sphere1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="sphere2" cx="70%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="sphere3" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+    <filter id="superBlur">
+      <feGaussianBlur stdDeviation="50" />
+    </filter>
+  </defs>
+  <rect width="800" height="400" fill="url(#bgGrad)" />
+  
+  <!-- Glowing overlapping blurry spheres creating elegant gradients -->
+  <g filter="url(#superBlur)">
+    <circle cx="280" cy="160" r="200" fill="url(#sphere1)" />
+    <circle cx="520" cy="240" r="200" fill="url(#sphere2)" />
+    <circle cx="400" cy="200" r="150" fill="url(#sphere3)" />
+  </g>
+  
+  <text x="50%" y="360" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="sans-serif" font-size="11" letter-spacing="4">ABSTRACT GRADIENT BLUR EXPERIMENT</text>
+</svg>

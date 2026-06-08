@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020813" />
+      <stop offset="50%" stop-color="#0a1528" />
+      <stop offset="100%" stop-color="#030810" />
+    </linearGradient>
+    <linearGradient id="coolGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <radialGradient id="blueGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0" />
+    </radialGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="35" />
+    </filter>
+  </defs>
+  <rect width="800" height="400" fill="url(#bgGrad)" />
+  <circle cx="400" cy="200" r="220" fill="url(#blueGlow)" filter="url(#blur)" />
+  
+  <!-- Calming freezing waves -->
+  <path d="M-100,200 Q200,100 400,220 T900,180" fill="none" stroke="url(#coolGrad)" stroke-width="6" opacity="0.85" />
+  <path d="M-100,160 Q150,260 450,120 T900,220" fill="none" stroke="url(#coolGrad)" stroke-width="2.5" opacity="0.45" />
+  
+  <text x="50%" y="350" text-anchor="middle" fill="#06b6d4" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="4">COOLING COLOR THERAPY</text>
+</svg>

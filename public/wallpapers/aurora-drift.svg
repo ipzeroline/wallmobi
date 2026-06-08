@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2340" viewBox="0 0 1080 2340"><defs>
+    <radialGradient id="g1" cx="28%" cy="22%" r="75%">
+      <stop offset="0%" stop-color="#a8e6c9" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#39b6a8" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0b1e3b" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g2" cx="78%" cy="82%" r="80%">
+      <stop offset="0%" stop-color="#1b6ca8" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#0b1e3b" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0b1e3b" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#0b1e3b"/><stop offset="100%" stop-color="#1b6ca8"/></linearGradient>
+  </defs>
+  <rect width="1080" height="2340" fill="url(#base)"/>
+  <rect width="1080" height="2340" fill="url(#g1)"/>
+  <rect width="1080" height="2340" fill="url(#g2)"/><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="1080" height="2340" filter="url(#n)" opacity="0.04"/></svg>
