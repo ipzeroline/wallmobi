@@ -48,9 +48,25 @@ const readMoreText: Record<Locale, string> = {
 
 const SWATCH: Record<string, string> = {
   anime: "#ff9500",
+  dragon: "#ff453a",
+  black: "#1c1c1e",
+  amoled: "#050505",
+  aesthetic: "#bf5af2",
   cyberpunk: "#ff2d55",
-  robot: "#8e8e93",
-  space: "#5856d6",
+  samurai: "#8e8e93",
+  oni: "#af1822",
+  wolf: "#0a84ff",
+  car: "#ff9f0a",
+  nature: "#30d158",
+  space: "#5e5ce6",
+  gaming: "#64d2ff",
+  cute: "#ff8a80",
+  dark: "#2c2c2e",
+  fantasy: "#ffd60a",
+  japanese: "#ff375f",
+  neon: "#32d74b",
+  supercar: "#ff5e00",
+  luxury: "#d4af37",
 };
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -60,6 +76,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(l);
 
   const allWps = await getDbWallpapers(l);
+  const categoryCounts = allWps.reduce((acc, wp) => {
+    acc[wp.category] = (acc[wp.category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
   const trending = await getDbTrending(l, 7);
   const latest = allWps.slice(0, 14);
   const totalDownloads = allWps.reduce((s, w) => s + w.downloads, 0);
@@ -139,8 +159,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="cat-grid">
           {categorySlugs.map((slug) => (
             <Link key={slug} href={`/${l}/category/${slug}`} className="cat-card">
-              <div className="swatch" style={{ background: SWATCH[slug] }} />
-              <h3>{dict.categories[slug].name}</h3>
+              <div className="cat-card-header">
+                <span className="dot" style={{ background: SWATCH[slug] }} />
+                <h3>{dict.categories[slug].name}</h3>
+                <span className="cat-count">{categoryCounts[slug] || 0}</span>
+              </div>
               <p>{dict.categories[slug].blurb}</p>
             </Link>
           ))}

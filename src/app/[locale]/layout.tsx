@@ -7,7 +7,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DetailsCloseHandler from "@/components/DetailsCloseHandler";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import Script from "next/script";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -110,16 +109,15 @@ export default async function LocaleLayout({
 
   return (
     <html lang={localeHtmlLang[l]} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <head />
-      <body>
-        <Script
-          id="theme-initializer"
-          strategy="beforeInteractive"
+      <head>
+        <script
           dangerouslySetInnerHTML={{
             __html:
               "(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t='light';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}})();",
           }}
         />
+      </head>
+      <body>
         <GoogleAnalytics />
         <DetailsCloseHandler />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
