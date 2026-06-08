@@ -13,6 +13,25 @@ import DownloadButton from "@/components/DownloadButton";
 import FullscreenPreview from "@/components/FullscreenPreview";
 import FavoriteButton from "@/components/FavoriteButton";
 
+function absoluteImageUrl(src: string) {
+  return /^https?:\/\//i.test(src) ? src : `${site.url}${src}`;
+}
+
+function imageExtension(src: string) {
+  const path = /^https?:\/\//i.test(src) ? new URL(src).pathname : src;
+  const match = path.match(/\.(png|jpe?g|webp|gif|svg)$/i);
+  return match ? `.${match[1].toLowerCase().replace("jpeg", "jpg")}` : ".png";
+}
+
+function imageMimeType(src: string) {
+  const ext = imageExtension(src);
+  if (ext === ".svg") return "image/svg+xml";
+  if (ext === ".webp") return "image/webp";
+  if (ext === ".gif") return "image/gif";
+  if (ext === ".jpg") return "image/jpeg";
+  return "image/png";
+}
+
 export async function generateStaticParams() {
   const all = await getDbWallpapers("en");
   return all.map((w) => ({
@@ -48,8 +67,19 @@ export async function generateMetadata({
   return {
     title,
     description: desc,
+    keywords: [
+      wp.title,
+      `${wp.category} wallpaper`,
+      `${wp.category} phone wallpaper`,
+      "phone wallpaper",
+      "mobile wallpaper",
+      "lock screen wallpaper",
+      "home screen wallpaper",
+      ...wp.tags,
+    ],
     alternates: alternates(locale, `/${wp.category}-wallpapers/${slug}`),
-    openGraph: { title, description: desc, images: [{ url: wp.src, width: wp.width, height: wp.height }] },
+    openGraph: { title, description: desc, images: [{ url: absoluteImageUrl(wp.src), width: wp.width, height: wp.height, alt: wp.title }] },
+    twitter: { card: "summary_large_image", title, description: desc, images: [absoluteImageUrl(wp.src)] },
   };
 }
 
@@ -70,6 +100,71 @@ export default async function WallpaperPage({
   const dict = getDictionary(l);
   const related = await getDbRelated(slug, wp.category, l);
   const cat = dict.categories[wp.category];
+  const imageUrl = absoluteImageUrl(wp.src);
+  const downloadFilename = `${wp.slug}${imageExtension(wp.src)}`;
+
+  const faqDownload: Record<Locale, { q: string; a: string }> = {
+    en: {
+      q: `How to download ${wp.title} wallpaper?`,
+      a: `Tap the Download button on this page to save the ${wp.title} phone wallpaper, then set it as your lock screen or home screen from your phone settings.`,
+    },
+    th: {
+      q: `วิธีดาวน์โหลดวอลเปเปอร์ ${wp.title} ทำอย่างไร?`,
+      a: `แตะปุ่มดาวน์โหลดบนหน้านี้เพื่อบันทึกวอลเปเปอร์มือถือ ${wp.title} แล้วตั้งเป็นหน้าจอล็อกหรือหน้าจอโฮมผ่านเมนูตั้งค่าของโทรศัพท์`,
+    },
+    vi: {
+      q: `Làm sao để tải hình nền ${wp.title}?`,
+      a: `Nhấn nút tải xuống trên trang này để lưu hình nền điện thoại ${wp.title}, sau đó đặt làm màn hình khóa hoặc màn hình chính trong cài đặt điện thoại.`,
+    },
+    my: {
+      q: `${wp.title} ဖုန်းနောက်ခံပုံကို ဘယ်လိုဒေါင်းလုဒ်လုပ်မလဲ?`,
+      a: `ဤစာမျက်နှာရှိ Download ခလုတ်ကိုနှိပ်ပြီး ${wp.title} ဖုန်းနောက်ခံပုံကို သိမ်းပါ။ ထို့နောက် ဖုန်း setting မှ lock screen သို့မဟုတ် home screen အဖြစ် သတ်မှတ်နိုင်သည်။`,
+    },
+    lo: {
+      q: `ດາວໂຫຼດວໍເປເປີ ${wp.title} ແນວໃດ?`,
+      a: `ກົດປຸ່ມດາວໂຫຼດໃນໜ້ານີ້ເພື່ອບັນທຶກວໍເປເປີມືຖື ${wp.title} ແລ້ວຕັ້ງເປັນໜ້າຈໍລັອກ ຫຼື ໜ້າຈໍໂຮມໃນການຕັ້ງຄ່າໂທລະສັບ.`,
+    },
+    km: {
+      q: `តើទាញយកផ្ទាំងរូបភាព ${wp.title} ដោយរបៀបណា?`,
+      a: `ចុចប៊ូតុងទាញយកនៅលើទំព័រនេះ ដើម្បីរក្សាទុកផ្ទាំងរូបភាពទូរស័ព្ទ ${wp.title} បន្ទាប់មកកំណត់ជាអេក្រង់ចាក់សោ ឬអេក្រង់ដើមតាមការកំណត់ទូរស័ព្ទ។`,
+    },
+  };
+
+  const faqCompatibility: Record<Locale, { q: string; a: string }> = {
+    en: {
+      q: "Is this wallpaper compatible with my phone?",
+      a: "Yes, this high-resolution phone wallpaper is suitable for modern smartphones including iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel, and other Android devices.",
+    },
+    th: {
+      q: "รูปนี้ใช้กับมือถือรุ่นไหนได้บ้าง?",
+      a: "วอลเปเปอร์มือถือความละเอียดสูงนี้เหมาะกับสมาร์ทโฟนรุ่นใหม่ เช่น iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel และมือถือ Android รุ่นอื่น ๆ",
+    },
+    vi: {
+      q: "Hình nền này dùng được cho điện thoại nào?",
+      a: "Hình nền điện thoại độ phân giải cao này phù hợp với iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel và nhiều thiết bị Android khác.",
+    },
+    my: {
+      q: "ဒီ wallpaper က ဘယ်ဖုန်းတွေမှာ သုံးလို့ရမလဲ?",
+      a: "ဤ high-resolution ဖုန်း wallpaper သည် iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel နှင့် Android ဖုန်းအများစုတွင် သုံးရန်သင့်တော်သည်။",
+    },
+    lo: {
+      q: "ວໍເປເປີນີ້ໃຊ້ກັບມືຖືຮຸ່ນໃດໄດ້ບ້າງ?",
+      a: "ວໍເປເປີມືຖືຄວາມລະອຽດສູງນີ້ເໝາະກັບ iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel ແລະມືຖື Android ອື່ນໆ.",
+    },
+    km: {
+      q: "ផ្ទាំងរូបភាពនេះប្រើជាមួយទូរស័ព្ទណាខ្លះ?",
+      a: "ផ្ទាំងរូបភាពទូរស័ព្ទគុណភាពខ្ពស់នេះសមស្របសម្រាប់ iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo, Google Pixel និងទូរស័ព្ទ Android ផ្សេងៗ។",
+    },
+  };
+
+  const detailSeoParagraphs: Record<Locale, string> = {
+    en: `Download ${wp.title} in the ${cat.name} category for a clean phone wallpaper experience. This high-resolution image is made for vertical screens and works well as an iPhone wallpaper, Samsung wallpaper, Android lock screen, and home screen background. Related tags include ${wp.tags.map(t => `#${t}`).join(", ")}.`,
+    th: `ดาวน์โหลด ${wp.title} ในหมวดหมู่ ${cat.name} สำหรับใช้เป็นวอลเปเปอร์มือถือแนวตั้ง ภาพความละเอียดสูงนี้เหมาะกับวอลเปเปอร์ iPhone, Samsung, Android, หน้าจอล็อก และหน้าจอโฮม โดยมีแท็กที่เกี่ยวข้องคือ ${wp.tags.map(t => `#${t}`).join(", ")}`,
+    vi: `Tải ${wp.title} trong danh mục ${cat.name} để dùng làm hình nền điện thoại dọc. Hình ảnh độ phân giải cao này phù hợp với hình nền iPhone, Samsung, Android, màn hình khóa và màn hình chính. Thẻ liên quan: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
+    my: `${cat.name} အမျိုးအစားထဲမှ ${wp.title} ကို ဖုန်းနောက်ခံပုံအဖြစ် ဒေါင်းလုဒ်လုပ်နိုင်သည်။ ဤ high-resolution ပုံသည် iPhone wallpaper, Samsung wallpaper, Android lock screen နှင့် home screen အတွက် သင့်တော်သည်။ ဆက်စပ် tags: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
+    lo: `ດາວໂຫຼດ ${wp.title} ໃນໝວດ ${cat.name} ເພື່ອໃຊ້ເປັນວໍເປເປີມືຖືແນວຕັ້ງ. ຮູບຄວາມລະອຽດສູງນີ້ເໝາະກັບ iPhone, Samsung, Android, ໜ້າຈໍລັອກ ແລະໜ້າຈໍໂຮມ. ແທັກທີ່ກ່ຽວຂ້ອງ: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
+    km: `ទាញយក ${wp.title} ក្នុងប្រភេទ ${cat.name} សម្រាប់ប្រើជាផ្ទាំងរូបភាពទូរស័ព្ទបញ្ឈរ។ រូបភាពគុណភាពខ្ពស់នេះសមស្របសម្រាប់ iPhone, Samsung, Android, អេក្រង់ចាក់សោ និងអេក្រង់ដើម។ ស្លាកពាក់ព័ន្ធ៖ ${wp.tags.map(t => `#${t}`).join(", ")}។`,
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -78,10 +173,11 @@ export default async function WallpaperPage({
         "@type": "ImageObject",
         name: wp.title,
         description: wp.desc[l],
-        contentUrl: `${site.url}${wp.src}`,
+        contentUrl: imageUrl,
+        thumbnailUrl: imageUrl,
         width: wp.width,
         height: wp.height,
-        encodingFormat: "image/svg+xml",
+        encodingFormat: imageMimeType(wp.src),
         datePublished: wp.published,
         creditText: site.name,
         creator: { "@type": "Organization", name: site.author },
@@ -101,22 +197,18 @@ export default async function WallpaperPage({
         mainEntity: [
           {
             "@type": "Question",
-            name: l === "th" ? `วิธีดาวน์โหลดวอลเปเปอร์ ${wp.title} ทำอย่างไร?` : `How to download ${wp.title} wallpaper?`,
+            name: faqDownload[l].q,
             acceptedAnswer: {
               "@type": "Answer",
-              "text": l === "th" 
-                ? `แตะที่ปุ่ม "ดาวน์โหลด" บนหน้านี้เพื่อบันทึกไฟล์รูปภาพ ${wp.title} ลงในอุปกรณ์ของคุณ จากนั้นตั้งค่าเป็นภาพพื้นหลังผ่านเมนูตั้งค่าของระบบโทรศัพท์` 
-                : `Tap the "Download" button on this page to save the ${wp.title} wallpaper file to your device, then set it as your background via your phone settings.`
+              "text": faqDownload[l].a
             }
           },
           {
             "@type": "Question",
-            "name": l === "th" ? `รูปภาพนี้ใช้กับ iPhone และ Android รุ่นไหนได้บ้าง?` : `Is this wallpaper compatible with my phone?`,
+            "name": faqCompatibility[l].q,
             acceptedAnswer: {
               "@type": "Answer",
-              "text": l === "th"
-                ? `วอลเปเปอร์นี้มีความละเอียดสูงและใช้สัดส่วนมาตรฐาน สามารถรองรับสมาร์ทโฟนได้ทุกรุ่น รวมถึง iPhone 15, 14, 13, Samsung Galaxy, Google Pixel, Xiaomi และมือถือรุ่นอื่นๆ`
-                : `Yes, this high-resolution wallpaper is fully compatible with all modern smartphones including iPhone 15, 14, 13, Samsung Galaxy, Google Pixel, Xiaomi, and other Android devices.`
+              "text": faqCompatibility[l].a
             }
           }
         ]
@@ -151,7 +243,7 @@ export default async function WallpaperPage({
 
           <DownloadButton
             src={wp.src}
-            filename={`${wp.slug}.svg`}
+            filename={downloadFilename}
             labels={{ download: dict.detail.download, preparing: dict.detail.preparing, saved: dict.detail.saved }}
             locale={l}
           />
@@ -182,9 +274,7 @@ export default async function WallpaperPage({
           {dict.seo.detailSeoText}
         </p>
         <p style={{ color: "var(--text-2)", fontSize: "0.96rem", lineHeight: "1.65" }}>
-          {l === "th"
-            ? `ดาวน์โหลดวอลเปเปอร์ ${wp.title} ในหมวดหมู่ ${cat.name} ฟรี รูปภาพนี้ได้รับการคัดสรรเป็นพิเศษและปรับแต่งขนาดให้พอดีกับหน้าจอมือถือ สมาร์ทโฟน iPhone และ Android ทุกรุ่น เหมาะสำหรับตั้งเป็นภาพหน้าจอล็อกและหน้าจอโฮมโดยมีแท็กที่เกี่ยวข้องคือ ${wp.tags.map(t => `#${t}`).join(", ")}`
-            : `Download ${wp.title} wallpaper in ${cat.name} category for free. This artwork is hand-picked and perfectly sized for mobile viewports, iPhone, and Android devices. Best used as lock screen and home screen backgrounds, containing tags: ${wp.tags.map(t => `#${t}`).join(", ")}.`}
+          {detailSeoParagraphs[l]}
         </p>
       </div>
 

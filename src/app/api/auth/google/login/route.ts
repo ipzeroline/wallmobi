@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { getRequestOrigin } from "@/lib/request-origin";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const locale = searchParams.get("locale") || "en";
+    const requestOrigin = getRequestOrigin(req);
 
     // 1. Generate secure random state token to protect against CSRF attacks
     const state = crypto.randomBytes(32).toString("hex");
@@ -47,9 +49,17 @@ export async function GET(req: Request) {
       path: "/",
     });
 
+    cookieStore.set("google_oauth_origin", requestOrigin, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 10, // 10 minutes
+      path: "/",
+    });
+
     // 4. Construct official Google OAuth 2.0 Auth Code URI
     const googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-    const redirectUri = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/auth/google/callback`;
+    const redirectUri = `${requestOrigin}/api/auth/google/callback`;
     const clientId = process.env.GOOGLE_CLIENT_ID || "";
 
     const params = new URLSearchParams({

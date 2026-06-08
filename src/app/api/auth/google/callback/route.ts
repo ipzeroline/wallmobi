@@ -4,17 +4,20 @@ import pool from "@/lib/db";
 import { setSession, hashPassword } from "@/lib/auth";
 import crypto from "crypto";
 import { sendTelegramNotification } from "@/lib/telegram";
+import { getRequestOrigin } from "@/lib/request-origin";
 
 export async function GET(req: Request) {
   const cookieStore = await cookies();
   const savedState = cookieStore.get("google_oauth_state")?.value;
   const savedVerifier = cookieStore.get("google_oauth_verifier")?.value;
   const savedLocale = cookieStore.get("google_oauth_locale")?.value || "en";
+  const savedOrigin = cookieStore.get("google_oauth_origin")?.value || getRequestOrigin(req);
 
   // Clean up cookies immediately
   cookieStore.delete("google_oauth_state");
   cookieStore.delete("google_oauth_verifier");
   cookieStore.delete("google_oauth_locale");
+  cookieStore.delete("google_oauth_origin");
 
   try {
     const { searchParams } = new URL(req.url);
@@ -37,7 +40,7 @@ export async function GET(req: Request) {
 
     // 2. Exchange code for Google Access & ID Tokens (including PKCE verifier)
     const tokenUrl = "https://oauth2.googleapis.com/token";
-    const redirectUri = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/auth/google/callback`;
+    const redirectUri = `${savedOrigin}/api/auth/google/callback`;
     
     const tokenParams = new URLSearchParams({
       code,
@@ -111,7 +114,7 @@ export async function GET(req: Request) {
     await setSession(userId);
 
     // 6. Redirect back to the localized dashboard
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/${savedLocale}/member`);
+    return NextResponse.redirect(`${savedOrigin}/${savedLocale}/member`);
   } catch (err: any) {
     return new Response("Google authentication failed: " + err.message, { status: 500 });
   }
