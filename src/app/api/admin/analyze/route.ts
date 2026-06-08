@@ -251,6 +251,50 @@ function meaningfulFilenameTitle(filename: string, category: string) {
   return titleCase(tokens.join(" "));
 }
 
+function mimeTypeFromExt(ext: string) {
+  if (ext === ".png") return "image/png";
+  if (ext === ".gif") return "image/gif";
+  if (ext === ".svg") return "image/svg+xml";
+  if (ext === ".webp") return "image/webp";
+  return "image/jpeg";
+}
+
+async function loadImageSource(src: string) {
+  if (/^https?:\/\//i.test(src)) {
+    const url = new URL(src);
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Remote image fetch failed with status ${res.status}`);
+    }
+
+    const pathname = url.pathname;
+    const ext = path.extname(pathname).toLowerCase();
+    const contentType = res.headers.get("content-type") || "";
+    return {
+      buffer: Buffer.from(await res.arrayBuffer()),
+      ext,
+      filename: path.basename(pathname, ext).toLowerCase() || "uploaded-wallpaper",
+      originalName: path.basename(pathname) || "uploaded-wallpaper",
+      mimeType: contentType.startsWith("image/") ? contentType : mimeTypeFromExt(ext),
+    };
+  }
+
+  const relativeSrc = src.replace(/^\/+/, "");
+  const filePath = path.join(process.cwd(), "public", relativeSrc);
+  if (!fs.existsSync(filePath)) {
+    throw new Error("File not found on server");
+  }
+
+  const ext = path.extname(filePath).toLowerCase();
+  return {
+    buffer: fs.readFileSync(filePath),
+    ext,
+    filename: path.basename(filePath, ext).toLowerCase(),
+    originalName: path.basename(filePath),
+    mimeType: mimeTypeFromExt(ext),
+  };
+}
+
 async function getExistingWallpaperMeta(category: string): Promise<ExistingWallpaperMeta> {
   const [rows] = await pool.query(
     `SELECT w.slug, t.title
@@ -386,12 +430,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Image source URL required" }, { status: 400 });
     }
 
-    const filePath = path.join(process.cwd(), "public", src);
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "File not found on server" }, { status: 404 });
-    }
-
-    const buffer = fs.readFileSync(filePath);
+    const imageSource = await loadImageSource(src);
+    const buffer = imageSource.buffer;
     const base64Data = buffer.toString("base64");
     const imageMeta = await sharp(buffer).metadata().catch(() => ({ width: 1080, height: 2340 }));
     const dominant = await sharp(buffer)
@@ -400,16 +440,11 @@ export async function POST(req: Request) {
       .then((stats) => stats.dominant)
       .catch(() => null);
 
-    // Check MIME type based on file extension
-    const ext = path.extname(filePath).toLowerCase();
-    let mimeType = "image/jpeg";
-    if (ext === ".png") mimeType = "image/png";
-    else if (ext === ".gif") mimeType = "image/gif";
-    else if (ext === ".svg") mimeType = "image/svg+xml";
-    else if (ext === ".webp") mimeType = "image/webp";
+    const ext = imageSource.ext;
+    const mimeType = imageSource.mimeType;
 
     const apiKey = process.env.GEMINI_API_KEY;
-    const filename = path.basename(filePath, ext).toLowerCase();
+    const filename = imageSource.filename;
     let detectedCategory = categorySlugs.includes(category_slug) ? category_slug : "aesthetic";
     for (const slug of categorySlugs) {
       if (!category_slug && filename.includes(slug)) {
@@ -438,7 +473,7 @@ export async function POST(req: Request) {
 Analyze this uploaded wallpaper image and return ONLY a valid JSON object. No markdown, no backticks.
 
 Image metadata:
-- Original filename: ${path.basename(filePath)}
+- Original filename: ${imageSource.originalName}
 - Dimensions: ${imageMeta.width || 1080}x${imageMeta.height || 2340}
 - Admin-selected category: ${detectedCategory}
 - Existing titles you MUST NOT repeat: ${existingMeta.titles.slice(0, 30).join(" | ") || "none"}

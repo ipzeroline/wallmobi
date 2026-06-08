@@ -4,6 +4,15 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import sharp from "sharp";
+import { isCloudinaryConfigured, uploadImageToCloudinary } from "@/lib/cloudinary";
+
+function mimeTypeFromExt(ext: string) {
+  if (ext === ".png") return "image/png";
+  if (ext === ".gif") return "image/gif";
+  if (ext === ".svg") return "image/svg+xml";
+  if (ext === ".webp") return "image/webp";
+  return "image/jpeg";
+}
 
 export async function POST(req: Request) {
   try {
@@ -49,17 +58,31 @@ export async function POST(req: Request) {
       .replace(/-+/g, "-");
     
     const filename = `${nameWithoutExt}-${randomHex}${ext}`;
-    const filePath = path.join(uploadDir, filename);
+    let publicUrl = `/wallpapers/uploads/${filename}`;
+    let storage: "cloudinary" | "local" = "local";
+    let cloudinaryPublicId: string | undefined;
 
-    // Save file to public/wallpapers/uploads/
-    fs.writeFileSync(filePath, buffer);
+    if (isCloudinaryConfigured()) {
+      const uploaded = await uploadImageToCloudinary({
+        buffer,
+        filename,
+        mimeType: mimeTypeFromExt(ext),
+      });
+      publicUrl = uploaded.secure_url;
+      storage = "cloudinary";
+      cloudinaryPublicId = uploaded.public_id;
+    } else {
+      const filePath = path.join(uploadDir, filename);
+      fs.writeFileSync(filePath, buffer);
+    }
 
-    const publicUrl = `/wallpapers/uploads/${filename}`;
     return NextResponse.json({
       success: true,
       url: publicUrl,
       filename,
       ext,
+      storage,
+      cloudinaryPublicId,
       width: metadata.width || 1080,
       height: metadata.height || 2340,
       format: metadata.format || ext.replace(".", ""),

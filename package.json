@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start -p 8778",
     "lint": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cdn:migrate:check": "node scripts/migrate-wallpapers-to-cloudinary.mjs",
+    "cdn:migrate:apply": "node scripts/migrate-wallpapers-to-cloudinary.mjs --apply"
   },
   "dependencies": {
     "@fontsource/noto-sans-myanmar": "^5.2.7",

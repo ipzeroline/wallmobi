@@ -60,14 +60,6 @@
   --select:#26425e;
   color-scheme:dark;
 }
-/* follow the OS when the visitor hasn't chosen (e.g. JS disabled) */
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#000000;--bg-alt:#1c1c1e;--surface:#161617;--text:#f5f5f7;--text-2:#a1a1a6;
-    --text-3:#6e6e73;--line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.22);
-    --accent:#2997ff;--accent-hover:#3aa0ff;--nav-bg:rgba(0,0,0,.7);--select:#26425e;color-scheme:dark;
-  }
-}
 /* smooth swap */
 body,.nav,.footer,.cat-card,.chip,.tile,.search-input,.specs,.spec,.tag,.lic .note{
   transition:background-color .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
