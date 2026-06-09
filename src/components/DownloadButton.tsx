@@ -28,7 +28,19 @@ export default function DownloadButton({
 
     try {
       setState("busy");
-      const res = await fetch(src);
+      const slug = filename.replace(/\.[a-zA-Z0-9]+$/, "");
+      const res = await fetch(`/api/downloads/secure?slug=${slug}`);
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem("wallmobi_active_user");
+          window.dispatchEvent(new Event("auth-change"));
+          router.push(`/${locale}/member`);
+          return;
+        }
+        throw new Error("Download failed");
+      }
+
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -39,14 +51,6 @@ export default function DownloadButton({
       a.remove();
       URL.revokeObjectURL(url);
 
-      // Save download history in DB
-      const slug = filename.replace(/\.[a-zA-Z0-9]+$/, "");
-      await fetch("/api/downloads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug }),
-      });
-      
       window.dispatchEvent(new Event("auth-change"));
 
       setState("done");

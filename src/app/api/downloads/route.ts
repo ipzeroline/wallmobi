@@ -32,6 +32,11 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { slug } = await req.json();
     if (!slug) {
       return NextResponse.json({ error: "Wallpaper slug is required" }, { status: 400 });
@@ -43,14 +48,11 @@ export async function POST(req: Request) {
       [slug]
     );
 
-    // 2. If user is authenticated, log in user_downloads history
-    const user = await getSessionUser();
-    if (user) {
-      await pool.query(
-        "INSERT INTO user_downloads (user_id, wallpaper_slug) VALUES (?, ?)",
-        [user.id, slug]
-      );
-    }
+    // 2. Log in user_downloads history
+    await pool.query(
+      "INSERT INTO user_downloads (user_id, wallpaper_slug) VALUES (?, ?)",
+      [user.id, slug]
+    );
 
     return NextResponse.json({ success: true });
   } catch (err: any) {

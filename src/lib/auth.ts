@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import pool from "./db";
+import { signSession, verifySession } from "./session-crypto";
+
 
 // Hashes passwords securely using PBKDF2 (zero external dependencies)
 export function hashPassword(password: string): string {
@@ -19,18 +21,18 @@ export async function getSessionUser() {
   if (!rawSessionToken) return null;
 
   const sessionToken = decodeURIComponent(rawSessionToken);
+  const verified = await verifySession(sessionToken);
 
-  // Parse expiration from session token
-  const parts = sessionToken.split("|");
-  const token = parts[0];
-  const expiresAt = parts.length > 1 ? parseInt(parts[1], 10) : 0;
-
-  if (Date.now() > expiresAt) {
-    // Session expired: invalidate in database and clear cookie
-    await pool.query("UPDATE users SET current_session_token = NULL WHERE current_session_token = ?", [token]);
+  if (!verified) {
+    const token = sessionToken.split("|")[0];
+    if (token) {
+      await pool.query("UPDATE users SET current_session_token = NULL WHERE current_session_token = ?", [token]);
+    }
     cookieStore.delete("wallmobi_session");
     return null;
   }
+
+  const { token } = verified;
 
   // Look up user by the static token UUID (no race condition since UUID is static in DB)
   const [rows] = await pool.query(
@@ -48,7 +50,7 @@ export async function getSessionUser() {
   const isAdmin = user.role === "super_admin" || user.role === "staff";
   const timeout = isAdmin ? ADMIN_TIMEOUT : MEMBER_TIMEOUT;
   const newExpiresAt = Date.now() + timeout;
-  const newSessionValue = `${token}|${newExpiresAt}`;
+  const newSessionValue = await signSession(token, newExpiresAt);
 
   try {
     cookieStore.set("wallmobi_session", newSessionValue, {
@@ -80,7 +82,7 @@ export async function setSession(userId: number) {
   const timeout = isAdmin ? ADMIN_TIMEOUT : MEMBER_TIMEOUT;
   const token = crypto.randomUUID();
   const expiresAt = Date.now() + timeout;
-  const sessionToken = `${token}|${expiresAt}`;
+  const sessionToken = await signSession(token, expiresAt);
   
   // Store only the static UUID token in the database to prevent write races on subsequent reads
   await pool.query("UPDATE users SET current_session_token = ? WHERE id = ?", [token, userId]);
