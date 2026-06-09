@@ -3,7 +3,7 @@ import { locales } from "./i18n/config";
 import { pickLocaleFromHeaders } from "./lib/locale-detection";
 import { verifySession } from "./lib/session-crypto";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // 1. Protect direct access to wallpapers (including uploads)
