@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser, hashPassword } from "@/lib/auth";
+import { serverErrorResponse } from "@/lib/api-response";
+
+const allowedRoles = new Set(["member", "staff", "super_admin"]);
 
 export async function GET() {
   try {
@@ -14,7 +17,8 @@ export async function GET() {
     );
     return NextResponse.json({ users: rows });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin users list error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -28,6 +32,12 @@ export async function POST(req: Request) {
     const { name, email, password, role } = await req.json();
     if (!name || !email || !password || !role) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    if (password.length < 8) {
+      return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
+    }
+    if (!allowedRoles.has(role)) {
+      return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
 
     const emailLower = email.toLowerCase().trim();
@@ -46,7 +56,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin user create error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -61,6 +72,9 @@ export async function PUT(req: Request) {
     if (!userId || !role) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+    if (!allowedRoles.has(role)) {
+      return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+    }
 
     // Prevent demoting oneself
     if (userId === user.id) {
@@ -70,7 +84,8 @@ export async function PUT(req: Request) {
     await pool.query("UPDATE users SET role = ? WHERE id = ?", [role, userId]);
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin user update error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -95,6 +110,7 @@ export async function DELETE(req: Request) {
     await pool.query("DELETE FROM users WHERE id = ?", [userId]);
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin user delete error:", err);
+    return serverErrorResponse(err.message);
   }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser, hashPassword } from "@/lib/auth";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function POST(req: Request) {
   try {
@@ -12,6 +13,9 @@ export async function POST(req: Request) {
     const { name, password } = await req.json();
     if (!name) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+    if (password && password.length < 8) {
+      return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
     }
 
     if (password) {
@@ -29,6 +33,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, user: { name, email: user.email } });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Profile update error:", err);
+    return serverErrorResponse(err.message);
   }
 }

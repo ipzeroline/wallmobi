@@ -47,12 +47,3 @@ export async function proxy(req: NextRequest) {
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
   return NextResponse.redirect(url);
 }
-
-export const config = {
-  matcher: [
-    // Match all page routes for locale redirection
-    "/((?!_next|api|static|favicon.ico).*)",
-    // Also explicitly match all wallpaper downloads
-    "/wallpapers/:path*",
-  ],
-};

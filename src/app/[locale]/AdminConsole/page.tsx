@@ -7,6 +7,7 @@ import Image from "next/image";
 import { categorySlugs } from "@/lib/site";
 import { getDictionary } from "@/i18n";
 import { isLocale } from "@/i18n/config";
+import { wallpaperImageUrl } from "@/lib/wallpaper-url";
 
 type Tab = "overview" | "wallpapers" | "users";
 const WALLPAPERS_PER_PAGE = 20;
@@ -23,6 +24,8 @@ export default function AdminDashboard() {
     const key = slug as keyof typeof dict.categories;
     return dict.categories[key]?.name || slug;
   };
+
+  const displayRole = (role: string) => (role === "premium" ? "member" : role);
 
   // Auth & UI States
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -488,7 +491,7 @@ export default function AdminDashboard() {
                 {topDownloaded.map((wp, idx) => (
                   <div key={idx} style={{ background: "var(--bg)", border: "1px solid var(--line)", borderRadius: "12px", overflow: "hidden", textAlign: "center", paddingBottom: "10px" }}>
                     <div style={{ aspectRatio: "1080/2340", position: "relative", width: "100%" }}>
-                      <Image src={wp.src} alt={wp.slug} fill sizes="160px" style={{ objectFit: "cover" }} />
+                      <Image src={wallpaperImageUrl(wp.slug, { width: 360 })} alt={wp.slug} fill sizes="160px" style={{ objectFit: "cover" }} unoptimized />
                     </div>
                     <div style={{ fontSize: "0.85rem", fontWeight: 600, marginTop: "8px", color: "var(--text-1)", padding: "0 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {wp.slug}
@@ -566,7 +569,7 @@ export default function AdminDashboard() {
                           style={{ width: "40px", height: "70px", position: "relative", borderRadius: "6px", overflow: "hidden", border: "1px solid var(--line)", cursor: "pointer" }}
                           title={locale === "th" ? "คลิกเพื่อดูตัวอย่าง" : "Click to preview"}
                         >
-                          <Image src={wp.src} alt={wp.slug} fill sizes="40px" style={{ objectFit: "cover" }} />
+                          <Image src={wallpaperImageUrl(wp.slug, { width: 120 })} alt={wp.slug} fill sizes="40px" style={{ objectFit: "cover" }} unoptimized />
                         </div>
                       </td>
                       <td style={{ padding: "12px 16px" }}>
@@ -748,11 +751,11 @@ export default function AdminDashboard() {
                           style={{
                             fontSize: "0.75rem",
                             padding: "2px 8px",
-                            background: u.role === "super_admin" ? "rgba(255, 45, 85, 0.15)" : u.role === "staff" ? "rgba(88, 86, 214, 0.15)" : u.role === "premium" ? "rgba(255, 149, 0, 0.15)" : "",
-                            color: u.role === "super_admin" ? "#ff2d55" : u.role === "staff" ? "#5856d6" : u.role === "premium" ? "#ff9500" : "",
+                            background: u.role === "super_admin" ? "rgba(255, 45, 85, 0.15)" : u.role === "staff" ? "rgba(88, 86, 214, 0.15)" : "",
+                            color: u.role === "super_admin" ? "#ff2d55" : u.role === "staff" ? "#5856d6" : "",
                           }}
                         >
-                          {u.role === "premium" ? (locale === "th" ? "Premium Member" : "Premium Member") : u.role}
+                          {displayRole(u.role)}
                         </span>
                       </td>
                       <td style={{ padding: "12px 16px", fontSize: "0.8rem", color: "var(--text-2)" }}>
@@ -763,12 +766,11 @@ export default function AdminDashboard() {
                           {u.id !== currentUser.id && (
                             <>
                               <select
-                                value={u.role}
+                                value={displayRole(u.role)}
                                 onChange={(e) => handleUpdateRole(u.id, e.target.value)}
                                 style={{ padding: "4px 8px", fontSize: "0.78rem", borderRadius: "6px", background: "var(--bg)", border: "1px solid var(--line)" }}
                               >
                                 <option value="member">Member</option>
-                                <option value="premium">Premium Member</option>
                                 <option value="staff">Staff</option>
                                 <option value="super_admin">Super Admin</option>
                               </select>
@@ -946,7 +948,7 @@ export default function AdminDashboard() {
                 background: "#000",
               }}
             >
-              <Image src={previewWp.src} alt={previewWp.slug} fill sizes="min(80vw, 420px)" style={{ objectFit: "cover" }} unoptimized />
+              <Image src={wallpaperImageUrl(previewWp.slug, { width: 900 })} alt={previewWp.slug} fill sizes="min(80vw, 420px)" style={{ objectFit: "cover" }} unoptimized />
             </div>
 
             <div style={{ fontSize: "0.82rem", color: "var(--text-3)", textAlign: "left", display: "flex", flexDirection: "column", gap: "4px" }}>

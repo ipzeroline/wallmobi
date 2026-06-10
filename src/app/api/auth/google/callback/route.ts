@@ -116,6 +116,7 @@ export async function GET(req: Request) {
     // 6. Redirect back to the localized dashboard
     return NextResponse.redirect(`${savedOrigin}/${savedLocale}/member`);
   } catch (err: any) {
-    return new Response("Google authentication failed: " + err.message, { status: 500 });
+    console.error("Google authentication error:", err);
+    return new Response(process.env.NODE_ENV === "production" ? "Google authentication failed" : "Google authentication failed: " + err.message, { status: 500 });
   }
 }

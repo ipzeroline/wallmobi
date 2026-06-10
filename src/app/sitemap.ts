@@ -17,7 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/about", freq: "monthly", priority: 0.4 },
     { path: "/license", freq: "yearly", priority: 0.3 },
     { path: "/blog", freq: "daily", priority: 0.8 },
-    { path: "/member", freq: "monthly", priority: 0.5 },
     { path: "/contact", freq: "monthly" as const, priority: 0.5 },
     ...categorySlugs.map((c) => ({ path: `/category/${c}`, freq: "weekly" as const, priority: 0.7 })),
     ...seoLandingPages.map((p) => ({ path: `/${p.slug}`, freq: "weekly" as const, priority: 0.85 })),

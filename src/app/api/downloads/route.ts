@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
+import { isSafeSlug, serverErrorResponse } from "@/lib/api-response";
 
 export async function GET(req: Request) {
   try {
@@ -26,7 +27,8 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, downloads: rows });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Downloads list error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -38,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     const { slug } = await req.json();
-    if (!slug) {
+    if (!slug || !isSafeSlug(slug)) {
       return NextResponse.json({ error: "Wallpaper slug is required" }, { status: 400 });
     }
 
@@ -56,6 +58,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Download log error:", err);
+    return serverErrorResponse(err.message);
   }
 }

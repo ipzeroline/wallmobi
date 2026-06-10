@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function GET() {
   try {
@@ -28,6 +29,7 @@ export async function GET() {
       topDownloaded,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin stats error:", err);
+    return serverErrorResponse(err.message);
   }
 }

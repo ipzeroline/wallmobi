@@ -3,11 +3,38 @@ import crypto from "crypto";
 import pool from "./db";
 import { signSession, verifySession } from "./session-crypto";
 
+const LEGACY_PASSWORD_SALT = "wallmobi_secret_salt_2026";
+const PASSWORD_ITERATIONS = 210000;
 
 // Hashes passwords securely using PBKDF2 (zero external dependencies)
 export function hashPassword(password: string): string {
-  const salt = "wallmobi_secret_salt_2026";
-  return crypto.pbkdf2Sync(password, salt, 10000, 64, "sha512").toString("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.pbkdf2Sync(password, salt, PASSWORD_ITERATIONS, 64, "sha512").toString("hex");
+  return `pbkdf2_sha512$${PASSWORD_ITERATIONS}$${salt}$${hash}`;
+}
+
+function safeEqualHex(left: string, right: string) {
+  if (left.length !== right.length) return false;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(left, "hex"), Buffer.from(right, "hex"));
+  } catch {
+    return false;
+  }
+}
+
+export function verifyPassword(password: string, storedHash: string): boolean {
+  const parts = storedHash.split("$");
+  if (parts.length === 4 && parts[0] === "pbkdf2_sha512") {
+    const iterations = parseInt(parts[1], 10);
+    const salt = parts[2];
+    const expected = parts[3];
+    if (!iterations || !salt || !expected) return false;
+    const actual = crypto.pbkdf2Sync(password, salt, iterations, 64, "sha512").toString("hex");
+    return safeEqualHex(actual, expected);
+  }
+
+  const legacyHash = crypto.pbkdf2Sync(password, LEGACY_PASSWORD_SALT, 10000, 64, "sha512").toString("hex");
+  return safeEqualHex(legacyHash, storedHash);
 }
 
 const ADMIN_TIMEOUT = 30 * 60 * 1000; // 30 minutes

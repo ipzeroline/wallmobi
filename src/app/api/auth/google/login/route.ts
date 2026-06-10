@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import { getRequestOrigin } from "@/lib/request-origin";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function GET(req: Request) {
   try {
@@ -75,6 +76,7 @@ export async function GET(req: Request) {
 
     return NextResponse.redirect(`${googleAuthUrl}?${params.toString()}`);
   } catch (err: any) {
-    return NextResponse.json({ error: "Failed to initiate login flow: " + err.message }, { status: 500 });
+    console.error("Google login start error:", err);
+    return serverErrorResponse(err.message);
   }
 }

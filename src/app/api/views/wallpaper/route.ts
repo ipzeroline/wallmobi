@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { isSafeSlug } from "@/lib/api-response";
 
 const filePath = path.join(process.cwd(), "src/data/wallpaper-views.json");
 
@@ -11,6 +12,9 @@ const memoryViews = new Map<string, number>();
 function readViews(): Record<string, number> {
   try {
     if (!fs.existsSync(filePath)) {
+      if (process.env.NODE_ENV === "production") {
+        return {};
+      }
       try {
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
         fs.writeFileSync(filePath, JSON.stringify({}));
@@ -49,6 +53,10 @@ function writeViews(views: Record<string, number>) {
     memoryViews.set(key, views[key]);
   });
 
+  if (process.env.NODE_ENV === "production") {
+    return;
+  }
+
   try {
     fs.writeFileSync(filePath, JSON.stringify(views, null, 2));
   } catch (error) {
@@ -60,7 +68,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
 
-  if (!slug) {
+  if (!slug || !isSafeSlug(slug)) {
     return NextResponse.json({ error: "Missing slug parameter" }, { status: 400 });
   }
 
@@ -74,7 +82,7 @@ export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
 
-  if (!slug) {
+  if (!slug || !isSafeSlug(slug)) {
     return NextResponse.json({ error: "Missing slug parameter" }, { status: 400 });
   }
 

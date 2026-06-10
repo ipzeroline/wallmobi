@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
-import { hashPassword, setSession } from "@/lib/auth";
+import { hashPassword, setSession, verifyPassword } from "@/lib/auth";
 import { headers } from "next/headers";
 import { isRateLimited, recordRateLimitAttempt, resetRateLimitAttempts } from "@/lib/rate-limit";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function POST(req: Request) {
   try {
@@ -33,14 +34,13 @@ export async function POST(req: Request) {
     await recordRateLimitAttempt(ip, "login");
 
     const emailLower = email.toLowerCase().trim();
-    const passwordHash = hashPassword(password);
 
     const [rows] = await pool.query(
-      "SELECT id, name, email, role FROM users WHERE (email = ? OR name = ?) AND password_hash = ?",
-      [emailLower, emailLower, passwordHash]
+      "SELECT id, name, email, role, password_hash FROM users WHERE email = ? OR name = ? LIMIT 5",
+      [emailLower, emailLower]
     );
 
-    const user = (rows as any)[0];
+    const user = (rows as any[]).find((row) => verifyPassword(password, row.password_hash));
     if (!user) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
@@ -48,11 +48,16 @@ export async function POST(req: Request) {
     // Reset attempts on successful login
     await resetRateLimitAttempts(ip, "login");
 
+    if (!String(user.password_hash).startsWith("pbkdf2_sha512$")) {
+      await pool.query("UPDATE users SET password_hash = ? WHERE id = ?", [hashPassword(password), user.id]);
+    }
+
     // Set session, generating a new UUID session token and invalidating prior logins in the DB
     await setSession(user.id);
 
     return NextResponse.json({ success: true, user: { name: user.name, email: user.email, role: user.role } });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Login error:", err);
+    return serverErrorResponse(err.message);
   }
 }

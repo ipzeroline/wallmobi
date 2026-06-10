@@ -8,6 +8,7 @@ import my from "@/i18n/dictionaries/my";
 import lo from "@/i18n/dictionaries/lo";
 import km from "@/i18n/dictionaries/km";
 import vi from "@/i18n/dictionaries/vi";
+import { serverErrorResponse } from "@/lib/api-response";
 
 const dicts = { en, th, my, lo, km, vi };
 const SWATCH: Record<string, string> = {
@@ -35,6 +36,12 @@ const SWATCH: Record<string, string> = {
 };
 
 export async function GET(req: Request) {
+  const migrationSecret = process.env.MIGRATION_SECRET;
+  const providedSecret = req.headers.get("x-migration-secret");
+  if (!migrationSecret || providedSecret !== migrationSecret) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const { searchParams } = new URL(req.url);
   const clear = searchParams.get("clear") === "true";
 
@@ -238,7 +245,8 @@ export async function GET(req: Request) {
     return NextResponse.json({ success: true, message: "Database tables created and seeded successfully" });
   } catch (err: any) {
     await connection.rollback();
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    console.error("Migration error:", err);
+    return serverErrorResponse(err.message);
   } finally {
     connection.release();
   }

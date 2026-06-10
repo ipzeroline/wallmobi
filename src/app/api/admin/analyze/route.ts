@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
+import { serverErrorResponse } from "@/lib/api-response";
 import fs from "fs";
 import path from "path";
 import { categorySlugs } from "@/lib/site";
@@ -582,6 +583,7 @@ Rules:
     }
 
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin analyze error:", err);
+    return serverErrorResponse(err.message);
   }
 }

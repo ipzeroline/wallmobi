@@ -5,14 +5,16 @@ import path from "path";
 import crypto from "crypto";
 import sharp from "sharp";
 import { isCloudinaryConfigured, uploadImageToCloudinary } from "@/lib/cloudinary";
+import { serverErrorResponse } from "@/lib/api-response";
 
 function mimeTypeFromExt(ext: string) {
   if (ext === ".png") return "image/png";
   if (ext === ".gif") return "image/gif";
-  if (ext === ".svg") return "image/svg+xml";
   if (ext === ".webp") return "image/webp";
   return "image/jpeg";
 }
+
+const maxUploadBytes = Math.max(1024 * 1024, parseInt(process.env.ADMIN_UPLOAD_MAX_BYTES || String(15 * 1024 * 1024), 10) || 15 * 1024 * 1024);
 
 export async function POST(req: Request) {
   try {
@@ -26,11 +28,14 @@ export async function POST(req: Request) {
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
+    if (file.size > maxUploadBytes) {
+      return NextResponse.json({ error: "Uploaded file is too large" }, { status: 413 });
+    }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const ext = path.extname(file.name).toLowerCase() || ".png";
-    const allowedExts = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg"]);
+    const allowedExts = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
     if (!allowedExts.has(ext)) {
       return NextResponse.json({ error: "Unsupported image type" }, { status: 400 });
@@ -88,6 +93,7 @@ export async function POST(req: Request) {
       format: metadata.format || ext.replace(".", ""),
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin upload error:", err);
+    return serverErrorResponse(err.message);
   }
 }

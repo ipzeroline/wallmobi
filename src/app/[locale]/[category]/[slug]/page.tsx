@@ -8,7 +8,7 @@ import { alternates } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { formatDownloads } from "@/lib/wallpapers";
 import { getDbWallpaper, getDbRelated, getDbWallpapers } from "@/lib/db-wallpapers";
-import { getSessionUser } from "@/lib/auth";
+import { wallpaperImageUrl } from "@/lib/wallpaper-url";
 import WallpaperCard from "@/components/WallpaperCard";
 import DownloadButton from "@/components/DownloadButton";
 import FullscreenPreview from "@/components/FullscreenPreview";
@@ -94,6 +94,39 @@ const publishedLabel: Record<Locale, string> = {
   km: "កាលបរិច្ឆេទផ្សាយ",
 };
 
+const memberDownloadCopy: Record<Locale, { title: string; body: string; badge: string }> = {
+  en: {
+    badge: "Free account",
+    title: "Sign in to remove the watermark",
+    body: "Guests can preview and download watermarked files. Free members get the original wallpaper without watermark.",
+  },
+  th: {
+    badge: "สมัครฟรี",
+    title: "เข้าสู่ระบบเพื่อดาวน์โหลดไม่มีลายน้ำ",
+    body: "ผู้เยี่ยมชมดูและดาวน์โหลดได้แบบมีลายน้ำ สมาชิกฟรีจะได้รับไฟล์ต้นฉบับไม่มีลายน้ำ",
+  },
+  vi: {
+    badge: "Tài khoản miễn phí",
+    title: "Đăng nhập để tải không có watermark",
+    body: "Khách có thể xem và tải tệp có watermark. Thành viên miễn phí nhận hình nền gốc không watermark.",
+  },
+  my: {
+    badge: "အခမဲ့အကောင့်",
+    title: "လော့ဂ်အင်ဝင်ပြီး watermark မပါဘဲ ဒေါင်းလုဒ်လုပ်ပါ",
+    body: "ဧည့်သည်များသည် watermark ပါသောဖိုင်ကို ကြည့်ရှု/ဒေါင်းလုဒ်လုပ်နိုင်သည်။ အခမဲ့အဖွဲ့ဝင်များသည် မူရင်း wallpaper ကို watermark မပါဘဲ ရရှိပါသည်။",
+  },
+  lo: {
+    badge: "ບັນຊີຟຣີ",
+    title: "ເຂົ້າລະບົບເພື່ອດາວໂຫຼດບໍ່ມີລາຍນ້ຳ",
+    body: "ຜູ້ເຂົ້າຊົມສາມາດເບິ່ງ ແລະດາວໂຫຼດໄຟລ໌ທີ່ມີລາຍນ້ຳໄດ້. ສະມາຊິກຟຣີຈະໄດ້ຮັບຮູບຕົ້ນສະບັບບໍ່ມີລາຍນ້ຳ.",
+  },
+  km: {
+    badge: "គណនីឥតគិតថ្លៃ",
+    title: "ចូលប្រើដើម្បីទាញយកដោយគ្មាន watermark",
+    body: "ភ្ញៀវអាចមើល និងទាញយកឯកសារដែលមាន watermark។ សមាជិកឥតគិតថ្លៃទទួលបានរូបភាពដើមដោយគ្មាន watermark។",
+  },
+};
+
 export default async function WallpaperPage({
   params,
 }: {
@@ -114,8 +147,7 @@ export default async function WallpaperPage({
   const imageUrl = absoluteImageUrl(wp.src);
   const downloadFilename = `${wp.slug}${imageExtension(wp.src)}`;
 
-  const user = await getSessionUser();
-  const isPremium = user && (user.role === "premium" || user.role === "super_admin" || user.role === "staff");
+  const previewSrc = wallpaperImageUrl(wp.slug, { width: 1280 });
 
   const faqDownload: Record<Locale, { q: string; a: string }> = {
     en: {
@@ -241,40 +273,7 @@ export default async function WallpaperPage({
 
       <div className="detail">
         <div className="detail-art rise" style={{ position: "relative", overflow: "hidden" }}>
-          <Image src={wp.src} alt={wp.desc[l]} width={wp.width} height={wp.height} priority />
-          {!isPremium && (
-            <div 
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                pointerEvents: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                zIndex: 10,
-                userSelect: "none"
-              }}
-            >
-              <div 
-                style={{
-                  color: "rgba(255, 255, 255, 0.16)",
-                  fontSize: "clamp(1.2rem, 5vw, 2.6rem)",
-                  fontWeight: "bold",
-                  transform: "rotate(-35deg)",
-                  whiteSpace: "nowrap",
-                  textShadow: "0 0 10px rgba(0,0,0,0.15)",
-                  fontFamily: "sans-serif",
-                  letterSpacing: "2px"
-                }}
-              >
-                WALLMOBI.COM PREVIEW
-              </div>
-            </div>
-          )}
+          <Image src={previewSrc} alt={wp.desc[l]} width={wp.width} height={wp.height} priority unoptimized />
         </div>
 
         <div className="detail-meta">
@@ -304,6 +303,18 @@ export default async function WallpaperPage({
             <div className="spec"><dt>{dict.detail.license}</dt><dd>{dict.detail.licenseValue}</dd></div>
           </dl>
 
+          <div style={{ border: "1px solid rgba(52, 199, 89, 0.22)", background: "rgba(52, 199, 89, 0.07)", borderRadius: "14px", padding: "0.95rem 1rem", marginBottom: "0.85rem" }}>
+            <div style={{ color: "#248a3d", fontSize: "0.78rem", fontWeight: 700, marginBottom: "0.25rem" }}>
+              {memberDownloadCopy[l].badge}
+            </div>
+            <div style={{ fontWeight: 700, color: "var(--text-1)", marginBottom: "0.25rem" }}>
+              {memberDownloadCopy[l].title}
+            </div>
+            <p style={{ color: "var(--text-2)", fontSize: "0.9rem", lineHeight: 1.45, margin: 0 }}>
+              {memberDownloadCopy[l].body}
+            </p>
+          </div>
+
           <DownloadButton
             src={wp.src}
             filename={downloadFilename}
@@ -312,7 +323,7 @@ export default async function WallpaperPage({
           />
 
           <FullscreenPreview
-            src={wp.src}
+            src={previewSrc}
             title={wp.title}
             locale={l}
           />

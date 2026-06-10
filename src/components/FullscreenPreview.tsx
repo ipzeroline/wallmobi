@@ -16,23 +16,6 @@ export default function FullscreenPreview({
   const [mode, setMode] = useState<"lock" | "home">("lock");
   const [currentTime, setCurrentTime] = useState("09:41");
   const [currentDate, setCurrentDate] = useState("Wednesday, June 7");
-  const [isPremium, setIsPremium] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      const raw = localStorage.getItem("wallmobi_active_user");
-      if (raw) {
-        try {
-          const u = JSON.parse(raw);
-          setIsPremium(u.role === "premium" || u.role === "super_admin" || u.role === "staff");
-        } catch {
-          setIsPremium(false);
-        }
-      } else {
-        setIsPremium(false);
-      }
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -146,40 +129,8 @@ export default function FullscreenPreview({
                 sizes="(max-width: 768px) 100vw, 360px"
                 style={{ objectFit: "cover", pointerEvents: "none" }}
                 priority
+                unoptimized
               />
-              {!isPremium && (
-                <div 
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    zIndex: 90,
-                    userSelect: "none"
-                  }}
-                >
-                  <div 
-                    style={{
-                      color: "rgba(255, 255, 255, 0.16)",
-                      fontSize: "1.8rem",
-                      fontWeight: "bold",
-                      transform: "rotate(-35deg)",
-                      whiteSpace: "nowrap",
-                      textShadow: "0 0 10px rgba(0,0,0,0.15)",
-                      fontFamily: "sans-serif",
-                      letterSpacing: "2px"
-                    }}
-                  >
-                    WALLMOBI.COM
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Simulated UI Screen */}

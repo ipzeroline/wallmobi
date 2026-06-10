@@ -4,6 +4,7 @@ import { hashPassword, setSession } from "@/lib/auth";
 import { sendTelegramNotification } from "@/lib/telegram";
 import { headers } from "next/headers";
 import { isRateLimited, recordRateLimitAttempt, resetRateLimitAttempts } from "@/lib/rate-limit";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function POST(req: Request) {
   try {
@@ -16,6 +17,9 @@ export async function POST(req: Request) {
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    if (password.length < 8) {
+      return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
     }
 
     // 2. IP-based Rate Limiting (max 5 registration attempts per 15 minutes)
@@ -63,6 +67,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, user: { name, email: emailLower } });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Register error:", err);
+    return serverErrorResponse(err.message);
   }
 }

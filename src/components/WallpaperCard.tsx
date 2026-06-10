@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Wallpaper } from "@/lib/wallpapers";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
+import { wallpaperImageUrl } from "@/lib/wallpaper-url";
 
 export default function WallpaperCard({
   wp,
@@ -19,12 +20,13 @@ export default function WallpaperCard({
     <Link href={`/${locale}/${wp.category}-wallpapers/${wp.slug}`} className="tile rise" aria-label={wp.title}>
       <Image
         className="tile-img"
-        src={wp.src}
+        src={wallpaperImageUrl(wp.slug, { width: 520 })}
         alt={wp.desc[locale]}
         width={wp.width}
         height={wp.height}
         sizes="(max-width:1000px) 45vw, 200px"
         priority={priority}
+        unoptimized
       />
       <div className="tile-info">
         <div className="tile-title">{wp.title}</div>

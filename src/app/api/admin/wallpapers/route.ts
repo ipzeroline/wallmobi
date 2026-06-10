@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
+import { serverErrorResponse } from "@/lib/api-response";
 
 export async function GET(req: Request) {
   try {
@@ -67,7 +68,8 @@ export async function GET(req: Request) {
       },
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin wallpapers list error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -171,7 +173,8 @@ export async function POST(req: Request) {
       connection.release();
     }
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin wallpaper create error:", err);
+    return serverErrorResponse(err.message);
   }
 }
 
@@ -192,6 +195,7 @@ export async function DELETE(req: Request) {
     await pool.query("DELETE FROM wallpapers WHERE id = ?", [id]);
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Admin wallpaper delete error:", err);
+    return serverErrorResponse(err.message);
   }
 }

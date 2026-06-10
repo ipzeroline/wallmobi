@@ -6,6 +6,10 @@ const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
 const dbPort = process.env.DB_PORT || "3306";
+const dbConnectionLimit = Math.max(1, parseInt(process.env.DB_CONNECTION_LIMIT || "4", 10) || 4);
+const dbIdleLimit = Math.max(1, Math.min(dbConnectionLimit, parseInt(process.env.DB_MAX_IDLE || String(dbConnectionLimit), 10) || dbConnectionLimit));
+const dbQueueLimit = Math.max(0, parseInt(process.env.DB_QUEUE_LIMIT || "200", 10) || 200);
+const dbConnectTimeout = Math.max(1000, parseInt(process.env.DB_CONNECT_TIMEOUT_MS || "10000", 10) || 10000);
 
 const missingDbEnvMessage =
   "Missing database environment variables. Please configure DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME.";
@@ -31,14 +35,17 @@ function wrapWithRetry<T extends (...args: any[]) => Promise<any>>(
       }
       return result;
     } catch (err: any) {
-      if (
-        err &&
-        (err.code === "ECONNRESET" ||
-          err.code === "PROTOCOL_CONNECTION_LOST" ||
-          err.code === "EPIPE" ||
-          err.code === "ETIMEDOUT")
-      ) {
+      const retryableCodes = new Set([
+        "ECONNRESET",
+        "PROTOCOL_CONNECTION_LOST",
+        "EPIPE",
+        "ETIMEDOUT",
+        "EADDRNOTAVAIL",
+      ]);
+
+      if (err && retryableCodes.has(err.code)) {
         console.warn(`[Database] Connection error ${err.code}. Retrying operation once...`);
+        await new Promise((resolve) => setTimeout(resolve, 250));
         const result = await fn.apply(context, args);
         if (isGetConnection && result) {
           return wrapConnection(result);
@@ -74,8 +81,10 @@ const rawPool =
         database: dbName,
         port: parseInt(dbPort, 10),
         waitForConnections: true,
-        connectionLimit: 10,
-        maxIdle: 10,
+        connectionLimit: dbConnectionLimit,
+        maxIdle: dbIdleLimit,
+        queueLimit: dbQueueLimit,
+        connectTimeout: dbConnectTimeout,
         idleTimeout: 30000, // Close idle connections after 30 seconds
         enableKeepAlive: true,
         keepAliveInitialDelay: 10000, // Probe every 10 seconds
