@@ -4,6 +4,7 @@ export const site = {
   // Set NEXT_PUBLIC_SITE_URL to the real production origin (no trailing slash).
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wallmobi.com").replace(/\/$/, ""),
   twitter: "@wallmobi",
+  tiktok: "https://www.tiktok.com/@wallmobi",
   author: "WallMobi Studio",
   founded: "2026",
 } as const;

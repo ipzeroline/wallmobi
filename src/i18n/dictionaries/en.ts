@@ -15,6 +15,8 @@ const en = {
     theme: "Appearance",
     menu: "Menu",
     blog: "Blog",
+
+    contact: "Contact",
   },
   hero: {
     eyebrow: "Free · High-res · Made for mobile",
@@ -152,7 +154,24 @@ const en = {
     categoryFooterText: "Our {category} wallpapers are carefully curated and optimized to blend in with your icons, offering the perfect balance of aesthetic appeal and usability.",
     detailSeoTitle: "Optimize Your Device Background",
     detailSeoText: "This wallpaper is designed in high definition and scaled for modern viewports. It is fully compatible with popular devices including iPhone 15, iPhone 14, Samsung Galaxy S24, Google Pixel, and Xiaomi. Download in SVG format ensures maximum clarity with zero pixelation at any display scale."
+  },
+  contact: {
+    title: "Contact Us",
+    description: "Get in touch with the WallMobi team. We would love to hear from you.",
+    emailLabel: "Contact Email",
+    emailValue: "funmask101@gmail.com",
+    formTitle: "Send a Message",
+    nameLabel: "Your Name",
+    emailFieldLabel: "Your Email Address",
+    messageLabel: "Message",
+    submitButton: "Send Message",
+    successMessage: "Thank you for reaching out! We will get back to you shortly.",
+    errorMessage: "Oops! Something went wrong. Please try again.",
+    validationName: "Please enter your name.",
+    validationEmail: "Please enter a valid email address.",
+    validationMessage: "Please enter your message."
   }
+
 };
 
 export type Dictionary = typeof en;

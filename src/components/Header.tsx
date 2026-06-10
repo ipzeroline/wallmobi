@@ -17,6 +17,7 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
     { href: `${base}/member`, label: locale === "th" ? "บัญชีผู้ใช้" : "Account" },
     { href: `${base}/about`, label: dict.nav.about },
     { href: `${base}/license`, label: dict.nav.license },
+    { href: `${base}/contact`, label: dict.nav.contact },
   ];
 
   return (
@@ -41,6 +42,7 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
           </details>
           <Link href={`${base}/about`}>{dict.nav.about}</Link>
           <Link href={`${base}/license`}>{dict.nav.license}</Link>
+          <Link href={`${base}/contact`}>{dict.nav.contact}</Link>
         </nav>
         <div className="nav-right">
           <details className="mobile-menu">

@@ -17,6 +17,8 @@ const vi: Dictionary = {
     theme: "Giao diện",
     menu: "Menu",
     blog: "Blog",
+
+    contact: "Liên hệ",
   },
   hero: {
     eyebrow: "Miễn phí · Độ phân giải cao · Dành cho di động",
@@ -154,7 +156,24 @@ const vi: Dictionary = {
     categoryFooterText: "Hình nền {category} của chúng tôi được thiết kế để hài hòa với các ứng dụng của bạn, đem lại sự cân bằng hoàn hảo giữa thẩm mỹ và trải nghiệm sử dụng.",
     detailSeoTitle: "Tối ưu hóa hình nền thiết bị của bạn",
     detailSeoText: "Hình nền này được thiết kế với độ phân giải cao, tương thích tốt với iPhone 15, iPhone 14, Samsung Galaxy S24, Google Pixel và Xiaomi. Định dạng SVG đảm bảo độ sắc nét tuyệt đối trên mọi loại màn hình."
+  },
+  contact: {
+    title: "Liên hệ",
+    description: "Liên hệ với nhóm WallMobi. Chúng tôi rất mong nhận được phản hồi từ bạn.",
+    emailLabel: "Email liên hệ",
+    emailValue: "funmask101@gmail.com",
+    formTitle: "Gửi tin nhắn",
+    nameLabel: "Tên của bạn",
+    emailFieldLabel: "Địa chỉ email của bạn",
+    messageLabel: "Tin nhắn",
+    submitButton: "Gửi tin nhắn",
+    successMessage: "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi lại bạn sớm.",
+    errorMessage: "Rất tiếc! Đã xảy ra lỗi. Vui lòng thử lại.",
+    validationName: "Vui lòng nhập tên của bạn.",
+    validationEmail: "Vui lòng nhập địa chỉ email hợp lệ.",
+    validationMessage: "Vui lòng nhập tin nhắn của bạn."
   }
+
 };
 
 export default vi;

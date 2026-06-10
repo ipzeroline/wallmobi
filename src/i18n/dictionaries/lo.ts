@@ -17,6 +17,8 @@ const lo: Dictionary = {
     theme: "ໂໝດສີ",
     menu: "ເມນູ",
     blog: "ບົດຄວາມ",
+
+    contact: "ຕິດຕໍ່ພວກເຮົາ",
   },
   hero: {
     eyebrow: "ຟຣີ · ຄວາມລະອຽດສູງ · ສຳລັບມືຖື",
@@ -154,7 +156,24 @@ const lo: Dictionary = {
     categoryFooterText: "ພາບພື້ນຫຼັງໝວດໝູ່ {category} ຂອງພວກເຮົາໄດ້ຮັບການອອກແບບ ແລະ ຄັດສັນເປັນພິເສດເພື່ອຄວາມລົງຕົວໃນໜ້າຈໍໂຮມຂອງທ່ານ.",
     detailSeoTitle: "ປັບແຕ່ງພື້ນຫຼັງມືຖືຂອງທ່ານໃຫ້ດີທີ່ສຸດ",
     detailSeoText: "ວໍເປເປີນີ້ມີຄວາມລະອຽດສູງ ແລະ ຮອງຮັບສະມາດໂຟນຍອດນິຍົມຢ່າງ iPhone 15, iPhone 14, Samsung Galaxy S24 ແລະ Google Pixel ໄດ້ເປັນຢ່າງດີ."
+  },
+  contact: {
+    title: "ຕິດຕໍ່ພວກເຮົາ",
+    description: "ຕິດຕໍ່ກັບທີມງານ WallMobi. ພວກເຮົາຍິນດີທີ່ຈະຮັບຟັງຄໍາຄິດເຫັນຈາກທ່ານ.",
+    emailLabel: "ອີເມວຕິດຕໍ່",
+    emailValue: "funmask101@gmail.com",
+    formTitle: "ສົ່ງຂໍ້ຄວາມຫາພວກເຮົາ",
+    nameLabel: "ຊື່ຂອງທ່ານ",
+    emailFieldLabel: "ທີ່ຢູ່ອີເມວຂອງທ່ານ",
+    messageLabel: "ຂໍ້ຄວາມ",
+    submitButton: "ສົ່ງຂໍ້ຄວາມ",
+    successMessage: "ຂອບໃຈສໍາລັບການຕິດຕໍ່! ພວກເຮົາຈະຕອບກັບໂດຍໄວ.",
+    errorMessage: "ຂໍອະໄພ! ມີບາງຢ່າງຜິດພາດ. ກະລຸນາລອງໃໝ່.",
+    validationName: "ກະລຸນາປ້ອນຊື່ຂອງທ່ານ.",
+    validationEmail: "ກະລຸນາປ້ອນທີ່ຢູ່ອີເມວທີ່ຖືກຕ້ອງ.",
+    validationMessage: "ກະລຸນາປ້ອນຂໍ້ຄວາມຂອງທ່ານ."
   }
+
 };
 
 export default lo;
