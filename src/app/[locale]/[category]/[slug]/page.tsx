@@ -8,6 +8,7 @@ import { alternates } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { formatDownloads } from "@/lib/wallpapers";
 import { getDbWallpaper, getDbRelated, getDbWallpapers } from "@/lib/db-wallpapers";
+import { getSessionUser } from "@/lib/auth";
 import WallpaperCard from "@/components/WallpaperCard";
 import DownloadButton from "@/components/DownloadButton";
 import FullscreenPreview from "@/components/FullscreenPreview";
@@ -112,6 +113,9 @@ export default async function WallpaperPage({
   const cat = dict.categories[wp.category];
   const imageUrl = absoluteImageUrl(wp.src);
   const downloadFilename = `${wp.slug}${imageExtension(wp.src)}`;
+
+  const user = await getSessionUser();
+  const isPremium = user && (user.role === "premium" || user.role === "super_admin" || user.role === "staff");
 
   const faqDownload: Record<Locale, { q: string; a: string }> = {
     en: {
@@ -236,8 +240,41 @@ export default async function WallpaperPage({
       </nav>
 
       <div className="detail">
-        <div className="detail-art rise">
+        <div className="detail-art rise" style={{ position: "relative", overflow: "hidden" }}>
           <Image src={wp.src} alt={wp.desc[l]} width={wp.width} height={wp.height} priority />
+          {!isPremium && (
+            <div 
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
+                zIndex: 10,
+                userSelect: "none"
+              }}
+            >
+              <div 
+                style={{
+                  color: "rgba(255, 255, 255, 0.16)",
+                  fontSize: "clamp(1.2rem, 5vw, 2.6rem)",
+                  fontWeight: "bold",
+                  transform: "rotate(-35deg)",
+                  whiteSpace: "nowrap",
+                  textShadow: "0 0 10px rgba(0,0,0,0.15)",
+                  fontFamily: "sans-serif",
+                  letterSpacing: "2px"
+                }}
+              >
+                WALLMOBI.COM PREVIEW
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="detail-meta">

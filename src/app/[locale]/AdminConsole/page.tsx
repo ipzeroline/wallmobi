@@ -748,11 +748,11 @@ export default function AdminDashboard() {
                           style={{
                             fontSize: "0.75rem",
                             padding: "2px 8px",
-                            background: u.role === "super_admin" ? "rgba(255, 45, 85, 0.15)" : u.role === "staff" ? "rgba(88, 86, 214, 0.15)" : "",
-                            color: u.role === "super_admin" ? "#ff2d55" : u.role === "staff" ? "#5856d6" : "",
+                            background: u.role === "super_admin" ? "rgba(255, 45, 85, 0.15)" : u.role === "staff" ? "rgba(88, 86, 214, 0.15)" : u.role === "premium" ? "rgba(255, 149, 0, 0.15)" : "",
+                            color: u.role === "super_admin" ? "#ff2d55" : u.role === "staff" ? "#5856d6" : u.role === "premium" ? "#ff9500" : "",
                           }}
                         >
-                          {u.role}
+                          {u.role === "premium" ? (locale === "th" ? "Premium Member" : "Premium Member") : u.role}
                         </span>
                       </td>
                       <td style={{ padding: "12px 16px", fontSize: "0.8rem", color: "var(--text-2)" }}>
@@ -768,6 +768,7 @@ export default function AdminDashboard() {
                                 style={{ padding: "4px 8px", fontSize: "0.78rem", borderRadius: "6px", background: "var(--bg)", border: "1px solid var(--line)" }}
                               >
                                 <option value="member">Member</option>
+                                <option value="premium">Premium Member</option>
                                 <option value="staff">Staff</option>
                                 <option value="super_admin">Super Admin</option>
                               </select>

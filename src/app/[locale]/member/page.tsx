@@ -555,6 +555,88 @@ export default function MemberPage() {
           {/* TAB CONTENT: PROFILE DETAILS */}
           {activeTab === "profile" && (
             <div style={{ background: "var(--bg-alt)", padding: "2rem", borderRadius: "18px", border: "1px solid var(--line)", animation: "fadeIn 0.25s" }}>
+              
+              {/* PREMIUM UPGRADE CARD */}
+              <div 
+                style={{ 
+                  background: currentUser.role === "premium" 
+                    ? "linear-gradient(135deg, rgba(52, 199, 89, 0.08) 0%, rgba(52, 199, 89, 0.02) 100%)" 
+                    : "linear-gradient(135deg, rgba(255, 149, 0, 0.08) 0%, rgba(255, 149, 0, 0.02) 100%)",
+                  border: currentUser.role === "premium" 
+                    ? "1px solid rgba(52, 199, 89, 0.25)" 
+                    : "1px solid rgba(255, 149, 0, 0.25)",
+                  borderRadius: "18px", 
+                  padding: "1.5rem", 
+                  marginBottom: "2rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.2rem"
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span style={{ fontSize: "1.8rem" }}>{currentUser.role === "premium" ? "👑" : "💎"}</span>
+                  <div>
+                    <h2 style={{ fontSize: "1.2rem", fontWeight: 700, margin: 0, color: "var(--text-1)" }}>
+                      {l === "th" ? "ระดับสมาชิกของคุณ" : "Your Membership Status"}
+                    </h2>
+                    <p style={{ margin: "2px 0 0 0", fontSize: "0.92rem", color: currentUser.role === "premium" ? "#30d158" : "#ff9500", fontWeight: 600 }}>
+                      {currentUser.role === "premium" 
+                        ? (l === "th" ? "สมาชิกพรีเมียม (ตลอดชีพ)" : "Premium Member (Lifetime)")
+                        : (currentUser.role === "super_admin" || currentUser.role === "staff")
+                          ? (l === "th" ? "ผู้ดูแลระบบ (ไม่มีลายน้ำ)" : "Administrator (No Watermark)")
+                          : (l === "th" ? "สมาชิกทั่วไป (ฟรี tier - มีลายน้ำเมื่อดาวน์โหลด)" : "Free Member (Watermarked Downloads)")
+                      }
+                    </p>
+                  </div>
+                </div>
+
+                {currentUser.role !== "premium" && currentUser.role !== "super_admin" && currentUser.role !== "staff" && (
+                  <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1.2rem", display: "grid", gap: "1.5rem", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+                    <div>
+                      <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.8rem 0", color: "var(--text-1)" }}>
+                        {l === "th" ? "อัปเกรดเป็นพรีเมียมเพียง 199 บาท ตลอดชีพ!" : "Upgrade to Premium for just 199 THB (Lifetime)!"}
+                      </h3>
+                      <ul style={{ paddingLeft: "1.2rem", margin: "0 0 1.2rem 0", display: "flex", flexDirection: "column", gap: "0.5rem", color: "var(--text-2)", fontSize: "0.92rem" }}>
+                        <li>🚫 {l === "th" ? "ดาวน์โหลดรูปภาพไม่มีลายน้ำ (No Watermark)" : "Remove watermarks from all downloaded wallpapers"}</li>
+                        <li>⚡ {l === "th" ? "ดาวน์โหลดไฟล์ความละเอียดสูงพิเศษและคมชัดที่สุด" : "Get original, uncompressed high-resolution files"}</li>
+                        <li>💖 {l === "th" ? "จ่ายครั้งเดียวใช้งานได้ตลอดชีพ ไม่มีรายเดือน" : "One-time payment for lifetime access, no subscriptions"}</li>
+                        <li>📱 {l === "th" ? "สนับสนุนสตูดิโอเล็ก ๆ ของเราในการสร้างภาพสวย ๆ" : "Support our indie wallpaper creation studio"}</li>
+                      </ul>
+
+                      <div style={{ background: "var(--bg)", border: "1px solid var(--line)", borderRadius: "14px", padding: "1.2rem", fontSize: "0.9rem", lineHeight: "1.5" }}>
+                        <p style={{ margin: "0 0 0.5rem 0", fontWeight: 600 }}>👉 {l === "th" ? "ขั้นตอนการเปิดใช้งานพรีเมียม:" : "How to activate Premium:"}</p>
+                        <ol style={{ paddingLeft: "1.2rem", margin: 0, display: "flex", flexDirection: "column", gap: "0.3rem", color: "var(--text-2)" }}>
+                          <li>{l === "th" ? "โอนเงิน 199 บาท ไปที่พร้อมเพย์ด้านล่าง" : "Transfer 199 THB via PromptPay or Bank account"}</li>
+                          <li>{l === "th" ? `ส่งรูปสลิปพร้อมระบุอีเมลบัญชีของคุณ (${currentUser.email}) ไปที่อีเมล:` : `Send your transfer receipt along with your email (${currentUser.email}) to:`} <strong style={{ color: "var(--accent)" }}>funmask101@gmail.com</strong> {l === "th" ? "หรือทาง TikTok: @wallmobi" : "or via TikTok: @wallmobi"}</li>
+                          <li>{l === "th" ? "ทีมงานจะเปิดใช้งานระบบพรีเมียมให้บัญชีคุณภายใน 1-12 ชั่วโมง" : "Our team will upgrade your account to Premium within 1-12 hours"}</li>
+                        </ol>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.6rem", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: "16px", padding: "1.5rem" }}>
+                      <div style={{ fontWeight: 600, fontSize: "0.92rem", color: "var(--text-2)" }}>{l === "th" ? "สแกนเพื่อจ่ายเงิน (พร้อมเพย์)" : "Scan to Pay (PromptPay QR)"}</div>
+                      
+                      {/* promptpay mockup QR Code representation */}
+                      <div style={{ background: "white", padding: "12px", borderRadius: "12px", display: "inline-flex", flexDirection: "column", alignItems: "center", border: "1px solid #ddd" }}>
+                        <div style={{ background: "#002a64", color: "white", width: "100%", padding: "4px 8px", borderRadius: "6px", fontSize: "0.75rem", fontWeight: "bold", textAlign: "center", marginBottom: "8px" }}>
+                          Prompt Pay
+                        </div>
+                        <div style={{ width: "160px", height: "160px", background: "#f8f9fa", border: "2px dashed #002a64", borderRadius: "8px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#002a64", gap: "8px" }}>
+                          <span style={{ fontSize: "2.2rem" }}>📱</span>
+                          <span style={{ fontSize: "1rem", fontWeight: "bold" }}>199 THB</span>
+                          <span style={{ fontSize: "0.65rem", color: "#666" }}>funmask101@gmail.com</span>
+                        </div>
+                      </div>
+                      
+                      <div style={{ textAlign: "center", fontSize: "0.78rem", color: "var(--text-3)", lineHeight: 1.4 }}>
+                        <div>{l === "th" ? "พร้อมเพย์: funmask101@gmail.com" : "PromptPay: funmask101@gmail.com"}</div>
+                        <div style={{ marginTop: "2px" }}>{l === "th" ? "บัญชีธนาคาร: ติดต่อที่อีเมลด้านบน" : "Bank Transfer: Contact email above"}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {updateSuccess && <div style={{ background: "rgba(52, 199, 89, 0.1)", border: "1px solid rgba(52, 199, 89, 0.3)", color: "#30d158", padding: "10px 14px", borderRadius: "10px", marginBottom: "1.2rem", fontSize: "0.92rem" }}>{updateSuccess}</div>}
               {errorMsg && <div style={{ background: "rgba(255, 69, 58, 0.1)", border: "1px solid rgba(255, 69, 58, 0.3)", color: "#ff453a", padding: "10px 14px", borderRadius: "10px", marginBottom: "1.2rem", fontSize: "0.92rem" }}>{errorMsg}</div>}
               
