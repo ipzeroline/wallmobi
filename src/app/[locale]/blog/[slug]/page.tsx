@@ -6,7 +6,7 @@ import { getDictionary } from "@/i18n";
 import { alternates } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { getBlogPost, blogPosts } from "@/lib/blog";
-import { getDbWallpapers } from "@/lib/db-wallpapers";
+import { getDbByCategories } from "@/lib/db-wallpapers";
 import WallpaperCard from "@/components/WallpaperCard";
 import BlogActions from "@/components/BlogActions";
 import BlogViewCounter from "@/components/BlogViewCounter";
@@ -23,29 +23,93 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const post = getBlogPost(slug);
   if (!isLocale(locale) || !post) return {};
-  
+
   const title = post.title[locale];
   const desc = post.excerpt[locale];
-  
+  const previewImage = post.ogImage ?? post.coverImage;
+  const image = previewImage ? `${site.url}${previewImage}` : undefined;
+  const imageSize = post.ogImage
+    ? { width: 1200, height: 630 }
+    : { width: 800, height: 400 };
+  const keywords = blogSeoKeywords(slug, locale, post.tags);
+
   return {
     title,
     description: desc,
+    keywords,
+    authors: [{ name: post.author }],
+    category: "Mobile wallpapers",
     alternates: alternates(locale, `/blog/${slug}`),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
     openGraph: {
       title,
       description: desc,
-      url: `/blog/${slug}`,
+      url: `${site.url}/${locale}/blog/${slug}`,
+      siteName: site.name,
       type: "article",
-      images: post.coverImage ? [
+      publishedTime: post.published,
+      modifiedTime: post.updated ?? post.published,
+      authors: [post.author],
+      tags: post.tags,
+      images: image ? [
         {
-          url: `${site.url}${post.coverImage}`,
-          width: 800,
-          height: 400,
+          url: image,
+          width: imageSize.width,
+          height: imageSize.height,
           alt: title,
         }
       ] : [],
-    }
+      locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: desc,
+      creator: site.twitter,
+      images: image ? [image] : undefined,
+    },
   };
+}
+
+function blogSeoKeywords(slug: string, locale: Locale, tags: string[]) {
+  const defaults = [
+    "phone wallpaper",
+    "mobile wallpaper",
+    "lock screen wallpaper",
+    "free wallpaper",
+    ...tags,
+  ];
+
+  const bySlug: Record<string, Partial<Record<Locale, string[]>>> = {
+    "thai-typography-quotes-inspiration": {
+      th: [
+        "วอลเปเปอร์คำคมภาษาไทย",
+        "วอลเปเปอร์ตัวอักษรไทย",
+        "วอลเปเปอร์คำคมให้กำลังใจ",
+        "พื้นหลังมือถือคำคม",
+        "วอลเปเปอร์มินิมอลภาษาไทย",
+        "ภาพพื้นหลังมือถือภาษาไทย",
+      ],
+      en: [
+        "Thai typography wallpaper",
+        "Thai quote wallpaper",
+        "minimal quote wallpaper",
+        "inspirational lock screen",
+        "Thai lettering wallpaper",
+      ],
+    },
+  };
+
+  return [...(bySlug[slug]?.[locale] ?? []), ...defaults];
+}
+
+function countArticleWords(text: string, locale: Locale) {
+  if (locale === "en") return text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(text.replace(/\s+/g, "").length / 5));
 }
 
 // Custom parser to render markdown style links [text](/url) dynamically into localized Link elements
@@ -105,13 +169,11 @@ export default async function BlogPostPage({
     "rise-of-ai-wallpaper-art": ["cyberpunk", "fantasy"],
     "choosing-the-right-wallpaper-color-for-eyes": ["nature", "space"],
     "svg-vs-png-mobile-wallpapers": ["aesthetic", "neon"],
+    "thai-typography-quotes-inspiration": ["minimal", "aesthetic"],
   };
 
   const suggestedCats = categorySuggestions[slug] ?? ["aesthetic"];
-  const dbWps = await getDbWallpapers(l);
-  const recommendedWallpapers = dbWps
-    .filter((w) => suggestedCats.includes(w.category))
-    .slice(0, 4);
+  const recommendedWallpapers = await getDbByCategories(suggestedCats, l, 4);
 
   // Calculate dynamic reading time
   const totalText = post.content
@@ -130,6 +192,7 @@ export default async function BlogPostPage({
   const readTime = l === "en" 
     ? Math.max(1, Math.ceil(totalText.split(/\s+/).length / 200)) 
     : Math.max(1, Math.ceil(charCount / 300));
+  const wordCount = countArticleWords(totalText, l);
 
   // Extract h2 and h3 headings for Table of Contents
   const headings = post.content
@@ -145,6 +208,7 @@ export default async function BlogPostPage({
     .filter((h): h is { text: string; id: string; level: 2 | 3 } => h !== null);
 
   const pageUrl = `${site.url}/${l}/blog/${slug}`;
+  const previewImage = post.ogImage ?? post.coverImage;
 
   // Structured Data (JSON-LD) with BlogPosting, BreadcrumbList, and FAQPage (if applicable)
   const jsonLd: any = {
@@ -155,8 +219,9 @@ export default async function BlogPostPage({
         "@id": `${pageUrl}#post`,
         headline: post.title[l],
         description: post.excerpt[l],
-        image: post.coverImage ? `${site.url}${post.coverImage}` : undefined,
+        image: previewImage ? `${site.url}${previewImage}` : undefined,
         datePublished: post.published,
+        dateModified: post.updated ?? post.published,
         author: { "@type": "Person", name: post.author },
         publisher: { 
           "@type": "Organization", 
@@ -169,6 +234,24 @@ export default async function BlogPostPage({
         },
         mainEntityOfPage: pageUrl,
         inLanguage: l,
+        isAccessibleForFree: true,
+        articleSection: post.tags[0] ?? "mobile wallpapers",
+        keywords: blogSeoKeywords(slug, l, post.tags).join(", "),
+        wordCount,
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: post.title[l],
+        description: post.excerpt[l],
+        inLanguage: l,
+        isPartOf: { "@type": "WebSite", name: site.name, url: site.url },
+        primaryImageOfPage: previewImage
+          ? { "@type": "ImageObject", url: `${site.url}${previewImage}`, width: 1200, height: 630 }
+          : undefined,
+        datePublished: post.published,
+        dateModified: post.updated ?? post.published,
       },
       {
         "@type": "BreadcrumbList",

@@ -171,6 +171,7 @@ export async function GET(req: Request) {
         user_id INT NOT NULL,
         wallpaper_slug VARCHAR(255) NOT NULL,
         downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_downloaded_wallpaper (downloaded_at, wallpaper_slug),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
@@ -181,6 +182,7 @@ export async function GET(req: Request) {
         wallpaper_slug VARCHAR(255) NOT NULL,
         favorited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, wallpaper_slug),
+        INDEX idx_favorited_wallpaper (favorited_at, wallpaper_slug),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);

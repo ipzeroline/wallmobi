@@ -15,23 +15,161 @@ import FullscreenPreview from "@/components/FullscreenPreview";
 import FavoriteButton from "@/components/FavoriteButton";
 import WallpaperViewCounter from "@/components/WallpaperViewCounter";
 
-function absoluteImageUrl(src: string) {
-  return /^https?:\/\//i.test(src) ? src : `${site.url}${src}`;
-}
-
 function imageExtension(src: string) {
   const path = /^https?:\/\//i.test(src) ? new URL(src).pathname : src;
   const match = path.match(/\.(png|jpe?g|webp|gif|svg)$/i);
   return match ? `.${match[1].toLowerCase().replace("jpeg", "jpg")}` : ".png";
 }
 
-function imageMimeType(src: string) {
-  const ext = imageExtension(src);
-  if (ext === ".svg") return "image/svg+xml";
-  if (ext === ".webp") return "image/webp";
-  if (ext === ".gif") return "image/gif";
-  if (ext === ".jpg") return "image/jpeg";
-  return "image/png";
+type WallpaperSeoCopy = {
+  title: string;
+  description: string;
+  displayTitle: string;
+  intro: string;
+  guideTitle: string;
+  guideText: string;
+  keywords: string[];
+  topicsTitle: string;
+  topics: { label: string; href: string }[];
+  extraFaqs: { q: string; a: string }[];
+};
+
+function wallpaperSeoCopy({
+  locale,
+  slug,
+  title,
+  description,
+  categoryName,
+  tags,
+}: {
+  locale: Locale;
+  slug: string;
+  title: string;
+  description: string;
+  categoryName: string;
+  tags: string[];
+}): WallpaperSeoCopy {
+  const genericTitle: Record<Locale, string> = {
+    en: `${title} Wallpaper - Free Mobile Download`,
+    th: `วอลเปเปอร์ ${title} - ดาวน์โหลดฟรีสำหรับมือถือ`,
+    vi: `Hình nền ${title} - Tải miễn phí cho điện thoại`,
+    my: `${title} ဖုန်းနောက်ခံပုံ - အခမဲ့ဒေါင်းလုဒ်`,
+    lo: `ວໍລເປເປີ ${title} - ດາວໂຫຼດຟຣີສຳລັບມືຖື`,
+    km: `ផ្ទាំងរូបភាព ${title} - ទាញយកឥតគិតថ្លៃ`,
+  };
+
+  const generic: WallpaperSeoCopy = {
+    title: genericTitle[locale],
+    description,
+    displayTitle: title,
+    intro: description,
+    guideTitle: locale === "th" ? `รายละเอียดวอลเปเปอร์ ${title}` : `About ${title}`,
+    guideText:
+      locale === "th"
+        ? `ดาวน์โหลด ${title} ในหมวดหมู่ ${categoryName} สำหรับใช้เป็นวอลเปเปอร์มือถือแนวตั้ง ภาพนี้เหมาะกับหน้าจอล็อก หน้าจอโฮม iPhone, Samsung Galaxy และมือถือ Android รุ่นใหม่`
+        : `Download ${title} in the ${categoryName} category for a vertical phone wallpaper that works well on lock screens, home screens, iPhone, Samsung Galaxy and modern Android devices.`,
+    keywords: [
+      title,
+      `${categoryName} wallpaper`,
+      "phone wallpaper",
+      "mobile wallpaper",
+      "lock screen wallpaper",
+      "home screen wallpaper",
+      ...tags,
+    ],
+    topicsTitle: locale === "th" ? "ลิงก์ที่เกี่ยวข้อง" : "Related links",
+    topics: [
+      { label: categoryName, href: "/category/anime" },
+      { label: locale === "th" ? "แกลเลอรีทั้งหมด" : "Full gallery", href: "/gallery" },
+    ],
+    extraFaqs: [],
+  };
+
+  if (slug !== "anime-wallpaper-cliffside-teahouse-golden-clouds-sunset-1cbf9b") return generic;
+
+  if (locale === "th") {
+    return {
+      title: "วอลเปเปอร์อนิเมะโรงน้ำชาบนหน้าผา ทะเลเมฆสีทอง 4K สำหรับมือถือ",
+      description:
+        "ดาวน์โหลดวอลเปเปอร์อนิเมะโรงน้ำชาบนหน้าผาเหนือทะเลเมฆสีทองยามพระอาทิตย์ตก สำหรับหน้าจอล็อกและหน้าจอโฮม iPhone, Samsung Galaxy และ Android",
+      displayTitle: "วอลเปเปอร์อนิเมะโรงน้ำชาบนหน้าผา ทะเลเมฆสีทอง",
+      intro:
+        "วอลเปเปอร์อนิเมะแนวอบอุ่นที่เล่าเรื่องโรงน้ำชาบนหน้าผา มองออกไปยังทะเลเมฆสีทองในช่วงพระอาทิตย์ตก เหมาะกับหน้าจอล็อกที่ต้องการบรรยากาศสงบ ชวนฝัน และอ่านนาฬิกาได้ชัดบนมือถือแนวตั้ง",
+      guideTitle: "ทำไมวอลเปเปอร์อนิเมะโรงน้ำชาบนหน้าผานี้เหมาะกับหน้าจอมือถือ",
+      guideText:
+        "ภาพนี้มีองค์ประกอบแนวตั้ง จุดโฟกัสอยู่ในตำแหน่งที่ไม่รบกวนไอคอนและพื้นที่นาฬิกา โทนสีทองของทะเลเมฆช่วยให้หน้าจอดูอบอุ่นแต่ยังคงอ่านการแจ้งเตือนได้ง่าย เหมาะสำหรับใช้เป็นวอลเปเปอร์ iPhone, Samsung Galaxy, Xiaomi, OPPO, vivo และมือถือ Android รุ่นใหม่",
+      keywords: [
+        "วอลเปเปอร์อนิเมะ",
+        "วอลเปเปอร์อนิเมะ 4K",
+        "วอลเปเปอร์โรงน้ำชา",
+        "วอลเปเปอร์ทะเลเมฆ",
+        "วอลเปเปอร์พระอาทิตย์ตก",
+        "วอลเปเปอร์อนิเมะมือถือ",
+        "พื้นหลังมือถืออนิเมะ",
+        "anime teahouse wallpaper",
+        "anime sunset wallpaper",
+        "anime phone wallpaper",
+        "anime lock screen",
+      ],
+      topicsTitle: "ดูวอลเปเปอร์สไตล์ใกล้เคียง",
+      topics: [
+        { label: "วอลเปเปอร์อนิเมะ", href: "/category/anime" },
+        { label: "วอลเปเปอร์ญี่ปุ่น", href: "/category/japanese" },
+        { label: "วอลเปเปอร์แฟนตาซี", href: "/category/fantasy" },
+        { label: "บทความเลือกวอลเปเปอร์อนิเมะ", href: "/blog/rise-of-ai-wallpaper-art" },
+      ],
+      extraFaqs: [
+        {
+          q: "วอลเปเปอร์อนิเมะโรงน้ำชานี้เหมาะกับหน้าจอล็อกไหม?",
+          a: "เหมาะครับ เพราะภาพเป็นแนวตั้ง มีพื้นที่ท้องฟ้าและทะเลเมฆที่ช่วยให้นาฬิกาและการแจ้งเตือนอ่านง่าย โดยไม่บดบังจุดเด่นของโรงน้ำชาบนหน้าผา",
+        },
+        {
+          q: "รูปนี้ใช้เป็นวอลเปเปอร์ iPhone และ Samsung Galaxy ได้ไหม?",
+          a: "ใช้ได้ครับ ภาพมีความละเอียดสูงและจัดองค์ประกอบสำหรับมือถือแนวตั้ง จึงเหมาะกับ iPhone, Samsung Galaxy และมือถือ Android รุ่นใหม่ส่วนใหญ่",
+        },
+      ],
+    };
+  }
+
+  return {
+    title: "Anime Teahouse Cliffside Golden Cloud Sunset Wallpaper for Mobile",
+    description:
+      "Download a cozy anime teahouse wallpaper with a cliffside view over golden sunset clouds, designed for iPhone, Samsung Galaxy and Android lock screens.",
+    displayTitle: "Anime Teahouse Cliffside Golden Cloud Sunset Wallpaper",
+    intro:
+      "A warm vertical anime wallpaper featuring a cozy teahouse on a cliff edge above a golden cloud sea at sunset, designed for calm mobile lock screens and home screens.",
+    guideTitle: "Why this anime teahouse wallpaper works well on phones",
+    guideText:
+      "The portrait composition keeps the main scene clear while leaving comfortable space for lock screen clocks, widgets and notifications. Its golden cloud palette adds warmth without making the screen feel visually crowded.",
+    keywords: [
+      "anime teahouse wallpaper",
+      "anime sunset wallpaper",
+      "anime phone wallpaper",
+      "anime lock screen",
+      "golden cloud wallpaper",
+      "cliffside teahouse wallpaper",
+      "iPhone wallpaper",
+      "Samsung Galaxy wallpaper",
+      "Android wallpaper",
+    ],
+    topicsTitle: "Related wallpaper styles",
+    topics: [
+      { label: "Anime wallpapers", href: "/category/anime" },
+      { label: "Japanese wallpapers", href: "/category/japanese" },
+      { label: "Fantasy wallpapers", href: "/category/fantasy" },
+      { label: "AI wallpaper trends", href: "/blog/rise-of-ai-wallpaper-art" },
+    ],
+    extraFaqs: [
+      {
+        q: "Is this anime teahouse wallpaper good for a lock screen?",
+        a: "Yes. The portrait layout keeps the main subject visible while leaving usable space for clocks, widgets and notifications.",
+      },
+      {
+        q: "Can I use this wallpaper on iPhone and Samsung Galaxy?",
+        a: "Yes. It is a high-resolution vertical phone wallpaper suitable for iPhone, Samsung Galaxy and most modern Android devices.",
+      },
+    ],
+  };
 }
 
 export async function generateStaticParams() {
@@ -54,34 +192,38 @@ export async function generateMetadata({
   // Validate category URL segment matches wallpaper category
   if (category !== `${wp.category}-wallpapers`) return {};
 
-  const desc = wp.desc[locale];
-  
-  const seoTitles: Record<string, string> = {
-    en: `${wp.title} Wallpaper — Free Mobile Download`,
-    th: `วอลเปเปอร์ ${wp.title} — ดาวน์โหลดฟรีสำหรับมือถือ`,
-    vi: `Hình nền ${wp.title} — Tải miễn phí cho điện thoại`,
-    my: `${wp.title} ဖုန်းနောက်ခံပုံ — အခမဲ့ဒေါင်းလုဒ်ဆွဲရန်`,
-    lo: `ວໍລເປເປີ ${wp.title} — ດາວໂຫຼດຟຣີສຳລັບມືຖື`,
-    km: `ផ្ទាំងរូបភាព ${wp.title} — ទាញយកដោយឥតគិតថ្លៃសម្រាប់ទូរស័ព្ទ`,
-  };
-  const title = seoTitles[locale] ?? `${wp.title} Wallpaper — Free Download`;
+  const dict = getDictionary(locale);
+  const cat = dict.categories[wp.category];
+  const copy = wallpaperSeoCopy({
+    locale,
+    slug,
+    title: wp.title,
+    description: wp.desc[locale],
+    categoryName: cat.name,
+    tags: wp.tags,
+  });
+  const previewImage = `${site.url}${wallpaperImageUrl(wp.slug, { width: 1200 })}`;
 
   return {
-    title,
-    description: desc,
-    keywords: [
-      wp.title,
-      `${wp.category} wallpaper`,
-      `${wp.category} phone wallpaper`,
-      "phone wallpaper",
-      "mobile wallpaper",
-      "lock screen wallpaper",
-      "home screen wallpaper",
-      ...wp.tags,
-    ],
+    title: copy.title,
+    description: copy.description,
+    keywords: copy.keywords,
     alternates: alternates(locale, `/${wp.category}-wallpapers/${slug}`),
-    openGraph: { title, description: desc, images: [{ url: absoluteImageUrl(wp.src), width: wp.width, height: wp.height, alt: wp.title }] },
-    twitter: { card: "summary_large_image", title, description: desc, images: [absoluteImageUrl(wp.src)] },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+    openGraph: {
+      title: copy.title,
+      description: copy.description,
+      url: `${site.url}/${locale}/${wp.category}-wallpapers/${slug}`,
+      siteName: site.name,
+      type: "article",
+      publishedTime: wp.published,
+      images: [{ url: previewImage, width: wp.width, height: wp.height, alt: copy.displayTitle }],
+    },
+    twitter: { card: "summary_large_image", title: copy.title, description: copy.description, images: [previewImage], creator: site.twitter },
   };
 }
 
@@ -144,10 +286,19 @@ export default async function WallpaperPage({
   const dict = getDictionary(l);
   const related = await getDbRelated(slug, wp.category, l);
   const cat = dict.categories[wp.category];
-  const imageUrl = absoluteImageUrl(wp.src);
   const downloadFilename = `${wp.slug}${imageExtension(wp.src)}`;
 
   const previewSrc = wallpaperImageUrl(wp.slug, { width: 1280 });
+  const previewImageUrl = `${site.url}${wallpaperImageUrl(wp.slug, { width: 1200 })}`;
+  const pageUrl = `${site.url}/${l}/${wp.category}-wallpapers/${wp.slug}`;
+  const seoCopy = wallpaperSeoCopy({
+    locale: l,
+    slug,
+    title: wp.title,
+    description: wp.desc[l],
+    categoryName: cat.name,
+    tags: wp.tags,
+  });
 
   const faqDownload: Record<Locale, { q: string; a: string }> = {
     en: {
@@ -204,8 +355,8 @@ export default async function WallpaperPage({
   };
 
   const detailSeoParagraphs: Record<Locale, string> = {
-    en: `Download ${wp.title} in the ${cat.name} category for a clean phone wallpaper experience. This high-resolution image is made for vertical screens and works well as an iPhone wallpaper, Samsung wallpaper, Android lock screen, and home screen background. Related tags include ${wp.tags.map(t => `#${t}`).join(", ")}.`,
-    th: `ดาวน์โหลด ${wp.title} ในหมวดหมู่ ${cat.name} สำหรับใช้เป็นวอลเปเปอร์มือถือแนวตั้ง ภาพความละเอียดสูงนี้เหมาะกับวอลเปเปอร์ iPhone, Samsung, Android, หน้าจอล็อก และหน้าจอโฮม โดยมีแท็กที่เกี่ยวข้องคือ ${wp.tags.map(t => `#${t}`).join(", ")}`,
+    en: `Download ${seoCopy.displayTitle} in the ${cat.name} category for a clean phone wallpaper experience. This high-resolution image is made for vertical screens and works well as an iPhone wallpaper, Samsung wallpaper, Android lock screen, and home screen background. Related tags include ${wp.tags.map(t => `#${t}`).join(", ")}.`,
+    th: `ดาวน์โหลด ${seoCopy.displayTitle} ในหมวดหมู่ ${cat.name} สำหรับใช้เป็นวอลเปเปอร์มือถือแนวตั้ง ภาพความละเอียดสูงนี้เหมาะกับวอลเปเปอร์ iPhone, Samsung, Android, หน้าจอล็อก และหน้าจอโฮม โดยมีแท็กที่เกี่ยวข้องคือ ${wp.tags.map(t => `#${t}`).join(", ")}`,
     vi: `Tải ${wp.title} trong danh mục ${cat.name} để dùng làm hình nền điện thoại dọc. Hình ảnh độ phân giải cao này phù hợp với hình nền iPhone, Samsung, Android, màn hình khóa và màn hình chính. Thẻ liên quan: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
     my: `${cat.name} အမျိုးအစားထဲမှ ${wp.title} ကို ဖုန်းနောက်ခံပုံအဖြစ် ဒေါင်းလုဒ်လုပ်နိုင်သည်။ ဤ high-resolution ပုံသည် iPhone wallpaper, Samsung wallpaper, Android lock screen နှင့် home screen အတွက် သင့်တော်သည်။ ဆက်စပ် tags: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
     lo: `ດາວໂຫຼດ ${wp.title} ໃນໝວດ ${cat.name} ເພື່ອໃຊ້ເປັນວໍເປເປີມືຖືແນວຕັ້ງ. ຮູບຄວາມລະອຽດສູງນີ້ເໝາະກັບ iPhone, Samsung, Android, ໜ້າຈໍລັອກ ແລະໜ້າຈໍໂຮມ. ແທັກທີ່ກ່ຽວຂ້ອງ: ${wp.tags.map(t => `#${t}`).join(", ")}.`,
@@ -217,29 +368,45 @@ export default async function WallpaperPage({
     "@graph": [
       {
         "@type": "ImageObject",
-        name: wp.title,
-        description: wp.desc[l],
-        contentUrl: imageUrl,
-        thumbnailUrl: imageUrl,
+        "@id": `${pageUrl}#primaryimage`,
+        name: seoCopy.displayTitle,
+        description: seoCopy.description,
+        contentUrl: previewImageUrl,
+        thumbnailUrl: previewImageUrl,
         width: wp.width,
         height: wp.height,
-        encodingFormat: imageMimeType(wp.src),
+        encodingFormat: "image/webp",
         datePublished: wp.published,
         creditText: site.name,
         creator: { "@type": "Organization", name: site.author },
         license: `${site.url}/${l}/license`,
         acquireLicensePage: `${site.url}/${l}/license`,
+        representativeOfPage: true,
+        keywords: seoCopy.keywords.join(", "),
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: seoCopy.title,
+        description: seoCopy.description,
+        inLanguage: l,
+        isPartOf: { "@type": "WebSite", name: site.name, url: site.url },
+        primaryImageOfPage: { "@id": `${pageUrl}#primaryimage` },
+        datePublished: wp.published,
+        mainEntity: { "@id": `${pageUrl}#primaryimage` },
       },
       {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: dict.category.home, item: `${site.url}/${l}` },
           { "@type": "ListItem", position: 2, name: cat.name, item: `${site.url}/${l}/category/${wp.category}` },
-          { "@type": "ListItem", position: 3, name: wp.title, item: `${site.url}/${l}/${wp.category}-wallpapers/${wp.slug}` },
+          { "@type": "ListItem", position: 3, name: seoCopy.displayTitle, item: pageUrl },
         ],
       },
       {
         "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
         mainEntity: [
           {
             "@type": "Question",
@@ -256,7 +423,15 @@ export default async function WallpaperPage({
               "@type": "Answer",
               "text": faqCompatibility[l].a
             }
-          }
+          },
+          ...seoCopy.extraFaqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.a,
+            },
+          })),
         ]
       }
     ],
@@ -268,7 +443,7 @@ export default async function WallpaperPage({
       <nav className="crumb" aria-label="Breadcrumb">
         <Link href={`/${l}`}>{dict.category.home}</Link><i>/</i>
         <Link href={`/${l}/category/${wp.category}`}>{cat.name}</Link><i>/</i>
-        <span style={{ color: "var(--text-2)" }}>{wp.title}</span>
+        <span style={{ color: "var(--text-2)" }}>{seoCopy.displayTitle}</span>
       </nav>
 
       <div className="detail">
@@ -277,8 +452,8 @@ export default async function WallpaperPage({
         </div>
 
         <div className="detail-meta">
-          <h1>{wp.title}</h1>
-          <p className="lede">{wp.desc[l]}</p>
+          <h1>{seoCopy.displayTitle}</h1>
+          <p className="lede">{seoCopy.intro}</p>
 
           <dl className="specs">
             <div className="spec"><dt>{dict.detail.resolution}</dt><dd>{wp.width} × {wp.height}</dd></div>
@@ -324,7 +499,7 @@ export default async function WallpaperPage({
 
           <FullscreenPreview
             src={previewSrc}
-            title={wp.title}
+            title={seoCopy.displayTitle}
             locale={l}
           />
 
@@ -339,18 +514,45 @@ export default async function WallpaperPage({
         </div>
       </div>
 
+      <nav aria-label={seoCopy.topicsTitle} style={{ maxWidth: "800px", margin: "2rem auto 0" }}>
+        <p className="eyebrow" style={{ marginBottom: ".75rem" }}>{seoCopy.topicsTitle}</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: ".65rem" }}>
+          {seoCopy.topics.map((topic) => (
+            <Link key={topic.href} href={`/${l}${topic.href}`} className="tag" style={{ textDecoration: "none" }}>
+              {topic.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
       {/* Wallpaper Detail SEO Block */}
       <div style={{ maxWidth: "800px", margin: "3rem auto 0", padding: "2rem 0 0", borderTop: "1px solid var(--line)" }}>
         <h2 style={{ fontSize: "1.35rem", fontWeight: 600, marginBottom: "0.8rem" }}>
-          {dict.seo.detailSeoTitle} — {wp.title}
+          {seoCopy.guideTitle}
         </h2>
         <p style={{ color: "var(--text-2)", fontSize: "0.96rem", lineHeight: "1.65", marginBottom: "1rem" }}>
-          {dict.seo.detailSeoText}
+          {seoCopy.guideText}
         </p>
         <p style={{ color: "var(--text-2)", fontSize: "0.96rem", lineHeight: "1.65" }}>
           {detailSeoParagraphs[l]}
         </p>
       </div>
+
+      {seoCopy.extraFaqs.length > 0 && (
+        <div id="faq-section" style={{ maxWidth: "800px", margin: "3rem auto 0", paddingTop: "2rem", borderTop: "1px solid var(--line)" }}>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "1.2rem" }}>
+            {l === "th" ? "คำถามที่พบบ่อยเกี่ยวกับวอลเปเปอร์นี้" : "Frequently Asked Questions"}
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            {[faqDownload[l], faqCompatibility[l], ...seoCopy.extraFaqs].map((faq, idx) => (
+              <div key={idx} style={{ background: "var(--bg-alt)", padding: "1.25rem 1.5rem", borderRadius: "14px", border: "1px solid var(--line)" }}>
+                <h3 style={{ fontSize: "1.02rem", fontWeight: 600, color: "var(--text-1)", margin: "0 0 0.5rem 0" }}>{faq.q}</h3>
+                <p style={{ fontSize: "0.95rem", color: "var(--text-2)", margin: 0, lineHeight: "1.55" }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {related.length > 0 && (
         <div className="section">

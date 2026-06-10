@@ -146,7 +146,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
         <div className="grid">
           {trending.map((wp, i) => (
-            <WallpaperCard key={wp.slug} wp={wp} locale={l} dict={dict} priority={i < 2} />
+            <div key={wp.slug} className={i >= 6 ? "mobile-hide" : undefined}>
+              <WallpaperCard wp={wp} locale={l} dict={dict} priority={i < 2} />
+            </div>
           ))}
         </div>
       </section>

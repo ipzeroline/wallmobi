@@ -208,149 +208,155 @@ export default function BlogSearchList({ posts, locale, siteName }: BlogSearchLi
         <div>
           <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))" }}>
             {currentPosts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/${locale}/blog/${post.slug}`}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  border: "1px solid var(--line)",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  textDecoration: "none",
-                  color: "inherit",
-                  background: "var(--bg-alt)",
-                  transition: "transform 0.2s var(--ease), border-color 0.2s var(--ease)",
-                }}
-                className="hover-card-anim"
-              >
-                <div
+              <article key={post.slug} style={{ minWidth: 0 }}>
+                <Link
+                  href={`/${locale}/blog/${post.slug}`}
                   style={{
-                    height: "170px",
-                    background: "linear-gradient(135deg, var(--line) 0%, var(--bg) 100%)",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderBottom: "1px solid var(--line)",
-                    position: "relative",
+                    flexDirection: "column",
+                    border: "1px solid var(--line)",
+                    borderRadius: "16px",
                     overflow: "hidden",
+                    textDecoration: "none",
+                    color: "inherit",
+                    background: "var(--bg-alt)",
+                    transition: "transform 0.2s var(--ease), border-color 0.2s var(--ease)",
+                    height: "100%",
                   }}
+                  className="hover-card-anim"
                 >
-                  {post.coverImage ? (
-                    <img
-                      src={post.coverImage}
-                      alt={post.title[locale]}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        fontSize: "2.5rem",
-                        opacity: 0.25,
-                        fontWeight: 800,
-                        letterSpacing: "-2px",
-                        color: "var(--text-1)",
-                      }}
-                    >
-                      {siteName}
-                    </div>
-                  )}
                   <div
                     style={{
-                      position: "absolute",
-                      bottom: "12px",
-                      left: "16px",
+                      height: "170px",
+                      background: "linear-gradient(135deg, var(--line) 0%, var(--bg) 100%)",
                       display: "flex",
-                      gap: "6px",
-                      zIndex: 2,
-                    }}
-                  >
-                    {post.tags.slice(0, 2).map((t) => (
-                      <span
-                        key={t}
-                        style={{
-                          fontSize: "0.75rem",
-                          background: "var(--surface)",
-                          border: "1px solid var(--line)",
-                          padding: "2px 8px",
-                          borderRadius: "20px",
-                          color: "var(--text-2)",
-                          fontWeight: 500,
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                        }}
-                      >
-                        #{t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                  <div 
-                    style={{ 
-                      display: "flex", 
-                      justifyContent: "space-between", 
                       alignItems: "center",
-                      fontSize: "0.82rem", 
-                      color: "var(--text-3)", 
-                      marginBottom: "0.5rem" 
-                    }}
-                  >
-                    <span>
-                      {new Date(post.published).toLocaleDateString(locale === "en" ? "en-US" : locale, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                    <BlogViewCounter slug={post.slug} locale={locale} increment={false} />
-                  </div>
-                  
-                  <h2
-                    style={{
-                      fontSize: "1.15rem",
-                      fontWeight: 600,
-                      marginBottom: "0.6rem",
-                      lineHeight: "1.4",
-                      color: "var(--text-1)",
-                    }}
-                  >
-                    {post.title[locale]}
-                  </h2>
-                  <p
-                    style={{
-                      fontSize: "0.9rem",
-                      color: "var(--text-2)",
-                      lineHeight: "1.5",
-                      margin: 0,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
+                      justifyContent: "center",
+                      borderBottom: "1px solid var(--line)",
+                      position: "relative",
                       overflow: "hidden",
                     }}
                   >
-                    {post.excerpt[locale]}
-                  </p>
-                  <div
-                    style={{
-                      marginTop: "auto",
-                      paddingTop: "1rem",
-                      fontSize: "0.88rem",
-                      fontWeight: 600,
-                      color: "var(--text-1)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                    }}
-                  >
-                    {readMoreText[locale] || readMoreText.en} →
+                    {post.coverImage ? (
+                      <img
+                        src={post.coverImage}
+                        alt={post.title[locale]}
+                        width={640}
+                        height={340}
+                        loading="lazy"
+                        decoding="async"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          fontSize: "2.5rem",
+                          opacity: 0.25,
+                          fontWeight: 800,
+                          letterSpacing: "-2px",
+                          color: "var(--text-1)",
+                        }}
+                      >
+                        {siteName}
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "12px",
+                        left: "16px",
+                        display: "flex",
+                        gap: "6px",
+                        zIndex: 2,
+                      }}
+                    >
+                      {post.tags.slice(0, 2).map((t) => (
+                        <span
+                          key={t}
+                          style={{
+                            fontSize: "0.75rem",
+                            background: "var(--surface)",
+                            border: "1px solid var(--line)",
+                            padding: "2px 8px",
+                            borderRadius: "20px",
+                            color: "var(--text-2)",
+                            fontWeight: 500,
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                          }}
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </Link>
+
+                  <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                    <div 
+                      style={{ 
+                        display: "flex", 
+                        justifyContent: "space-between", 
+                        alignItems: "center",
+                        fontSize: "0.82rem", 
+                        color: "var(--text-3)", 
+                        marginBottom: "0.5rem" 
+                      }}
+                    >
+                      <time dateTime={post.published}>
+                        {new Date(post.published).toLocaleDateString(locale === "en" ? "en-US" : locale, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </time>
+                      <BlogViewCounter slug={post.slug} locale={locale} increment={false} />
+                    </div>
+                    
+                    <h2
+                      style={{
+                        fontSize: "1.15rem",
+                        fontWeight: 600,
+                        marginBottom: "0.6rem",
+                        lineHeight: "1.4",
+                        color: "var(--text-1)",
+                      }}
+                    >
+                      {post.title[locale]}
+                    </h2>
+                    <p
+                      style={{
+                        fontSize: "0.9rem",
+                        color: "var(--text-2)",
+                        lineHeight: "1.5",
+                        margin: 0,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {post.excerpt[locale]}
+                    </p>
+                    <div
+                      style={{
+                        marginTop: "auto",
+                        paddingTop: "1rem",
+                        fontSize: "0.88rem",
+                        fontWeight: 600,
+                        color: "var(--text-1)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      {readMoreText[locale] || readMoreText.en} →
+                    </div>
+                  </div>
+                </Link>
+              </article>
             ))}
           </div>
 

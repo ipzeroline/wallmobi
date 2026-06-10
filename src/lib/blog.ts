@@ -13,7 +13,9 @@ export type BlogPost = {
   title: LocalizedText;
   excerpt: LocalizedText;
   coverImage?: string;
+  ogImage?: string;
   published: string;
+  updated?: string;
   author: string;
   tags: string[];
   takeaways?: LocalizedText[];

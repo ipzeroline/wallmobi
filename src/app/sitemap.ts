@@ -4,16 +4,23 @@ import { getDbWallpapers } from "@/lib/db-wallpapers";
 import { blogPosts } from "@/lib/blog";
 import { locales, defaultLocale, localeHtmlLang } from "@/i18n/config";
 import { seoLandingPages } from "@/lib/seo-landing-pages";
+import { GALLERY_PAGE_SIZE } from "@/lib/gallery-seo";
 
 type RouteDef = { path: string; freq: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number; last?: Date };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dbWps = await getDbWallpapers("en");
   const now = new Date();
+  const galleryPages = Math.max(1, Math.ceil(dbWps.length / GALLERY_PAGE_SIZE));
 
   const routes: RouteDef[] = [
     { path: "", freq: "daily", priority: 1 },
     { path: "/gallery", freq: "daily", priority: 0.9 },
+    ...Array.from({ length: Math.max(0, galleryPages - 1) }, (_, index) => ({
+      path: `/gallery/page/${index + 2}`,
+      freq: "daily" as const,
+      priority: 0.75,
+    })),
     { path: "/about", freq: "monthly", priority: 0.4 },
     { path: "/license", freq: "yearly", priority: 0.3 },
     { path: "/blog", freq: "daily", priority: 0.8 },
