@@ -31,6 +31,7 @@ const SWATCH: Record<string, string> = {
   neon: "#39ff14",
   supercar: "#ff3b30",
   luxury: "#d4af37",
+  minimal: "#eaeaea",
 };
 
 export async function GET(req: Request) {

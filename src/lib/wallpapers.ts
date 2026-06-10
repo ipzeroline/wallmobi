@@ -5018,6 +5018,207 @@ export const wallpapers: Wallpaper[] = [
       "my": "8K ရုပ်ထွက်ဖြင့် ဒီဇိုင်းထုတ်ထားသော လှပသည့် Luxury Suite နောက်ခံပုံ။"
     }
   }
+,
+  {
+    slug: "quiet-horizons",
+    title: "Quiet Horizons",
+    category: "minimal",
+    color: "#e5e5e5",
+    src: "/wallpapers/minimal-1.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","clean","line","aesthetic","nature"],
+    downloads: 12850,
+    published: "2026-06-05",
+    desc: {
+      en: "A clean, peaceful minimalist landscape with a subtle horizon line.",
+      th: "ทิวทัศน์มินิมอลที่เงียบสงบพร้อมเส้นขอบฟ้าที่เรียบหรูและบางเบา",
+      vi: "Phong cảnh tối giản sạch sẽ, thanh bình với đường chân trời tinh tế.",
+      my: "သိမ်မွေ့သော မိုးကုပ်စက်ဝိုင်းလိုင်းပါဝင်သည့် သန့်ရှင်းအေးချမ်းသော ရိုးရှင်းသည့် ရှုခင်း။",
+      lo: "ທິວທັດມິນິມອນທີ່ງຽບສະຫງົບພ້ອມເສັ້ນຂອບຟ້າທີ່ລຽບງ່າຍ.",
+      km: "ទេសភាពសាមញ្ញស្ងប់ស្ងាត់និងស្អាតជាមួយនឹងខ្សែបន្ទាត់ជើងមេឃដ៏ស្រទន់។"
+    }
+  },
+  {
+    slug: "geometric-line",
+    title: "Geometric Line",
+    category: "minimal",
+    color: "#f0f0f0",
+    src: "/wallpapers/minimal-2.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","geometry","art","white"],
+    downloads: 9400,
+    published: "2026-06-04",
+    desc: {
+      en: "Abstract geometric lines crossing over a warm-tinted light background.",
+      th: "เส้นเรขาคณิตแบบนามธรรมพาดผ่านพื้นหลังสีอ่อนโทนอุ่นอย่างลงตัว",
+      vi: "Các đường hình học trừu tượng cắt qua nền sáng tông ấm.",
+      my: "နွေးထွေးသော နောက်ခံအလင်းပေါ်တွင် ဖြတ်သန်းနေသော စိတ်ကူးယဉ် ဂျီသြမေတြီလိုင်းများ။",
+      lo: "ເສັ້ນເລຂາຄະນິດແບບນາມມະທຳພາດຜ່ານພື້ນຫຼັງສີອ່ອນໂທນອຸ່ນ.",
+      km: "ខ្សែបន្ទាត់ធរណីមាត្រអរូបីឆ្លងកាត់លើផ្ទៃខាងក្រោយពណ៌ស្រាលដែលមានពណ៌ក្តៅ។"
+    }
+  },
+  {
+    slug: "nordic-wave",
+    title: "Nordic Wave",
+    category: "minimal",
+    color: "#e8eff5",
+    src: "/wallpapers/minimal-3.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","wave","blue","aesthetic"],
+    downloads: 15120,
+    published: "2026-06-03",
+    desc: {
+      en: "Soft flowing Nordic-inspired waves in calming pastel blue tones.",
+      th: "เกลียวคลื่นนุ่มนวลสไตล์นอร์ดิกในโทนสีฟ้าพาสเทลที่ให้ความรู้สึกผ่อนคลาย",
+      vi: "Những làn sóng mềm mại lấy cảm hứng từ Bắc Âu với tông màu xanh pastel dịu nhẹ.",
+      my: "အေးချမ်းသော ပက်စတယ် အပြာရောင်တိုနီဖြင့် စီးဆင်းနေသော နော်ဒစ်လှိုင်းများ။",
+      lo: "ເກຼັຽວຄື້ນນຸ່ມນວນສະໄຕລ໌ນໍດິກໃນໂທນສີຟ້າພັດເທລ.",
+      km: "រលកហូរដ៏ស្រទន់បែបន័រឌីកក្នុងស្រមោលពណ៌ខៀវស្រាលដ៏ស្ងប់ស្ងាត់។"
+    }
+  },
+  {
+    slug: "minimal-sand-mirage",
+    title: "Sand Mirage",
+    category: "minimal",
+    color: "#dfd5c6",
+    src: "/wallpapers/minimal-4.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","sand","warm","desert"],
+    downloads: 11200,
+    published: "2026-06-01",
+    desc: {
+      en: "Warm sand dunes forming abstract minimalist curves.",
+      th: "เนินทรายสีอุ่นที่โค้งมนอย่างเรียบง่ายในสไตล์มินิมอล",
+      vi: "Những cồn cát ấm áp tạo thành các đường cong tối giản trừu tượng.",
+      my: "ရိုးရှင်းသော စိတ်ကူးယဉ် အကွေ့အကောက်များ ဖြစ်ပေါ်စေသည့် นွေးထွေးသော သဲခုံများ။",
+      lo: "ເນີນຊາຍສີອຸ່ນທີ່ໂຄ້ງມົນຢ່າງລຽບງ່າຍໃນສະໄຕລ໌ມິນິມອນ.",
+      km: "វាលខ្សាច់ពណ៌ក្តៅបង្កើតជាខ្សែកោងសាមញ្ញអរូបី។"
+    }
+  },
+  {
+    slug: "matte-flow",
+    title: "Matte Flow",
+    category: "minimal",
+    color: "#2b2b2b",
+    src: "/wallpapers/minimal-5.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","dark","abstract","matte"],
+    downloads: 18450,
+    published: "2026-05-30",
+    desc: {
+      en: "Elegant smooth matte flows with soft shadows for a modern dark look.",
+      th: "เส้นสายสีดำแมตต์ที่ลื่นไหลและหรูหราพร้อมเงาที่นุ่มนวลสำหรับหน้าจอโทนมืด",
+      vi: "Các dòng chảy mờ mịn màng thanh lịch với bóng mềm cho vẻ ngoài tối hiện đại.",
+      my: "ခေတ်မီသော အမှောင်ပုံစံအတွက် နူးညံ့သောအမှောင်ရိပ်များပါရှိသည့် သပ်ရပ်ချောမွေ့သော ဖျော့တော့လှိုင်းများ။",
+      lo: "ເສັ້ນສາຍສີດຳແມັດທີ່ມື່นໄຫຼ ແລະ ຫຼູຫຼາພ້ອມເງົາທີ່ນຸ່ມນວນ.",
+      km: "លំហូរម៉ាត់ដ៏រលោងនិងប្រណីតជាមួយនឹងស្រមោលស្រទន់សម្រាប់រូបរាងងងឹតទំនើប។"
+    }
+  },
+  {
+    slug: "stealth-grid",
+    title: "Stealth Grid",
+    category: "minimal",
+    color: "#1a1a1a",
+    src: "/wallpapers/minimal-6.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","grid","black","amoled"],
+    downloads: 22600,
+    published: "2026-05-28",
+    desc: {
+      en: "Ultra-minimal stealth grid lines on pitch-black background.",
+      th: "ตารางกราฟิกแบบมินิมอลบางเฉียบสีเทาเข้มบนพื้นหลังสีดำสนิทเพื่อประหยัดแบตเตอรี่",
+      vi: "Các đường lưới ẩn siêu tối giản trên nền đen tuyền.",
+      my: "အမည်းရောင်နောက်ခံပေါ်တွင် အလွန်ရိုးရှင်းသော ဇယားကွက်လိုင်းများ။",
+      lo: "ຕາລາງກຣาຟິກແບບມິນິມອນບາງສະເພາະສີເທົາເຂັ້ມບົນພື້ນຫຼັງສີດຳສະໜິດ.",
+      km: "ខ្សែបន្ទាត់ក្រឡាចត្រង្គលាក់ខ្លួនបែបសាមញ្ញបំផុតលើផ្ទៃខាងក្រោយខ្មៅងងឹត។"
+    }
+  },
+  {
+    slug: "zen-arc",
+    title: "Zen Arc",
+    category: "minimal",
+    color: "#eae5db",
+    src: "/wallpapers/minimal-7.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","zen","circle","peaceful"],
+    downloads: 8900,
+    published: "2026-05-25",
+    desc: {
+      en: "A single brush stroke arc representing Zen peace and alignment.",
+      th: "ลายเส้นพู่กันโค้งเดี่ยวสไตล์เซนที่ให้ความรู้สึกสงบ สมดุล และมีสมาธิ",
+      vi: "Một đường vòng cung cọ duy nhất đại diện cho sự hòa bình và liên kết Zen.",
+      my: "ဇင်ငြိမ်းချမ်းမှုနှင့် လိုက်ဖက်ညီမှုကို ကိုယ်စားပြုသော စုတ်ချက်တစ်ချက် အကွေ့အကောက်။",
+      lo: "ລາຍເສັ້ນພູ່ກັນໂຄ້ງດ່ຽວສະໄຕລ໌ເຊັນທີ່ໃຫ້ຄວາມຮູ້ສຶກສະຫງົບ.",
+      km: "ខ្សែកោងគំនូរជក់តែមួយតំណាងឱ្យភាពស្ងប់ស្ងាត់និងភាពស៊ីសង្វាក់គ្នាបែបហ្សេន។"
+    }
+  },
+  {
+    slug: "warm-clay",
+    title: "Warm Clay",
+    category: "minimal",
+    color: "#d4a373",
+    src: "/wallpapers/minimal-8.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","clay","orange","pastel"],
+    downloads: 10500,
+    published: "2026-05-22",
+    desc: {
+      en: "Earth-toned claymorphic shapes stacked in a clean, quiet composition.",
+      th: "รูปทรงดินเผาโทนสีธรรมชาติจัดวางซ้อนกันในสไตล์มินิมอลที่สะอาดตาและเงียบสงบ",
+      vi: "Các khối đất sét tông màu đất xếp chồng lên nhau trong một bố cục sạch sẽ, tĩnh lặng.",
+      my: "သန့်ရှင်းအေးချမ်းသော ဖွဲ့စည်းမှုတွင် စီထားသော မြေကြီးရောင် ရိုးရှင်းသော ပုံသဏ္ဌာန်များ။",
+      lo: "ຮູບຊົງດິນເຜົາໂທນສີທຳມະຊາດຈັດວາງຊ້ອນກັນຢ່າງລຽບງ່າຍ.",
+      km: "រាងដីឥដ្ឋពណ៌ធម្មជាតិដែលតម្រៀបគ្នាក្នុងសមាសភាពស្អាតនិងស្ងប់ស្ងាត់។"
+    }
+  },
+  {
+    slug: "soft-shadow",
+    title: "Soft Shadow",
+    category: "minimal",
+    color: "#f5f5f7",
+    src: "/wallpapers/minimal-9.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","shadow","clean","gray"],
+    downloads: 14700,
+    published: "2026-05-20",
+    desc: {
+      en: "Minimal shadow cast on a clean white wall, creating depth with simplicity.",
+      th: "แสงเงาบางเบาตกกระทบบนกำแพงสีขาวสะอาดตา เพิ่มมิติความลึกที่เรียบง่ายแต่ดูดี",
+      vi: "Bóng tối giản đổ lên bức tường trắng sạch sẽ, tạo chiều sâu một cách đơn giản.",
+      my: "ရိုးရှင်းမှုဖြင့် အနက်ကို ဖန်တီးပေးသည့် သန့်ရှင်းသော အဖြူရောင်နံရံပေါ်ရှိ ရိုးရှင်းသော အရိပ်။",
+      lo: "ແສງເງົາບາງເບົາຕົກກະທົບບົນກຳແພງສີຂາວສະອາດຕາ.",
+      km: "ស្រមោលស្រទន់ចាំងលើជញ្ជាំងពណ៌សស្អាត បង្កើតជម្រៅដោយភាពសាមញ្ញ。 "
+    }
+  },
+  {
+    slug: "lunar-outline",
+    title: "Lunar Outline",
+    category: "minimal",
+    color: "#121214",
+    src: "/wallpapers/minimal-10.png",
+    width: 1080,
+    height: 2340,
+    tags: ["minimal","moon","outline","dark"],
+    downloads: 19800,
+    published: "2026-05-18",
+    desc: {
+      en: "A glowing crescent moon outline on a dark starry night background.",
+      th: "เส้นเสี้ยวพระจันทร์เรืองแสงบางเบาบนพื้นหลังคืนเดือนมืดที่แสนสงบ",
+      vi: "Đường viền trăng khuyết phát sáng trên nền đêm tối giản.",
+      my: "မှောင်မိုက်သော ရိုးရှင်းသည့် ညနောက်ခံပေါ်တွင် တောက်ပနေသော လခြမ်းပုံသဏ္ဌာန်။",
+      lo: "ເສັ້ນສ້ຽວພະຈັນເຮືອງແສງບາງເບົາບົນພື້ນຫຼັງຄືนເດືອນມືດ.",
+      km: "គ្រោងព្រះច័ន្ទចម្រៀកភ្លឺចែងចាំងលើផ្ទៃខាងក្រោយរាត្រីងងឹតបែបសាមញ្ញ។"
+    }
+  }
 ];
 
 export function getAllWallpapers(): Wallpaper[] {

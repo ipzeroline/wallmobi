@@ -30,6 +30,7 @@ export const categorySlugs = [
   "neon",
   "supercar",
   "luxury",
+  "minimal",
 ] as const;
 
 export type CategorySlug = (typeof categorySlugs)[number];

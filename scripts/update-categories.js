@@ -24,7 +24,8 @@ const categorySlugs = [
   "japanese",
   "neon",
   "supercar",
-  "luxury"
+  "luxury",
+  "minimal"
 ];
 
 // Translations dictionary map with SEO-optimized names containing "Wallpapers" / local equivalents
@@ -49,7 +50,17 @@ const categoryTranslations = {
     japanese: { name: "Japanese Wallpapers", blurb: "Traditional shrines, cherry blossoms, and classic ukiyo-e vibes." },
     neon: { name: "Neon Wallpapers", blurb: "Glowing vector lines, vibrant signboards, and electric light shapes." },
     supercar: { name: "Supercar Wallpapers", blurb: "Exotic hypercars, track monsters, and futuristic concept vehicles." },
-    luxury: { name: "Luxury Wallpapers", blurb: "Gold accents, premium marble, and elegant high-class aesthetics." }
+    luxury: { name: "Luxury Wallpapers", blurb: "Gold accents, premium marble, and elegant high-class aesthetics." },
+    minimal: {
+      name: "Minimalist Wallpapers",
+      blurb: "Clean layouts, simple lines, and peaceful minimalist phone backgrounds.",
+      seoTitle: "About our Minimalist Wallpapers Collection",
+      seoText: "Explore our handpicked minimalist wallpapers, designed to bring calm and focus to your mobile screen. Featuring clean vector lines, soft pastel gradients, and dark battery-saving AMOLED textures, these backgrounds are optimized for vertical displays. Every wallpaper is tested behind icons to guarantee perfect text contrast and visual balance.",
+      faqs: [
+        { q: "What is a minimalist wallpaper?", a: "A minimalist wallpaper focuses on simplicity, using limited color palettes, clean lines, and minimal graphic elements to create a calm, distraction-free phone background." },
+        { q: "Does a minimalist wallpaper save phone battery?", a: "Yes, if you use an OLED or AMOLED display, choosing a minimalist wallpaper with dark or pure black areas will turn off pixels and help reduce battery consumption." }
+      ]
+    }
   },
   th: {
     anime: { name: "วอลเปเปอร์อนิเมะ", blurb: "ภาพวาดสไตล์อบอุ่น เมฆฤดูร้อน และทิวทัศน์ย้อนวันวันที่แสนคิดถึง" },
@@ -71,7 +82,17 @@ const categoryTranslations = {
     japanese: { name: "วอลเปเปอร์สไตล์ญี่ปุ่น", blurb: "ศาลเจ้าดั้งเดิม ดอกซากุระบาน และบรรยากาศภาพพิมพ์คลาสสิกของญี่ปุ่น" },
     neon: { name: "วอลเปเปอร์นีออน", blurb: "เส้นเวกเตอร์เรืองแสง ป้ายไฟสีสันสดใส และรูปทรงแสงนีออนไฟฟ้า" },
     supercar: { name: "วอลเปเปอร์ซูเปอร์คาร์", blurb: "ไฮเปอร์คาร์ที่แปลกตา สัตว์ร้ายในสนามแข่ง และรถแนวคิดแห่งอนาคต" },
-    luxury: { name: "วอลเปเปอร์ความหรูหรา", blurb: "การตกแต่งสีทอง หินอ่อนพรีเมียม และสุนทรียภาพแห่งความหรูหรา" }
+    luxury: { name: "วอลเปเปอร์ความหรูหรา", blurb: "การตกแต่งสีทอง หินอ่อนพรีเมียม และสุนทรียภาพแห่งความหรูหรา" },
+    minimal: {
+      name: "วอลเปเปอร์มินิมอล",
+      blurb: "การออกแบบที่เรียบง่าย ลายเส้นที่สะอาดตา และพื้นหลังสไตล์มินิมอลที่ดูสบายตา",
+      seoTitle: "เกี่ยวกับคอลเลกชันวอลเปเปอร์มินิมอล",
+      seoText: "ดาวน์โหลดวอลเปเปอร์มินิมอล (Minimalist Wallpapers) คุณภาพสูงสำหรับสมาร์ทโฟน iPhone และ Android คอลเลกชันของเราเน้นดีไซน์ที่เรียบง่าย ลายเส้นสะอาดตา โทนสีพาสเทลสบายตา และกราฟิกสีเข้มที่ช่วยประหยัดแบตเตอรี่ ทุกรูปภาพได้รับการปรับแต่งขนาดให้เข้ากับหน้าจอแนวตั้งและทดสอบความลงตัวกับไอคอนแอปและวิดเจ็ต เพื่อไม่ให้รบกวนสายตาระหว่างใช้งานจริง",
+      faqs: [
+        { q: "วอลเปเปอร์มินิมอลคืออะไร?", a: "วอลเปเปอร์มินิมอลคือภาพพื้นหลังมือถือที่เน้นความเรียบง่าย ใช้โทนสีที่จำกัด มีลายเส้นที่สะอาดตา และลดทอนรายละเอียดที่ไม่จำเป็น เพื่อช่วยลดความล้าของสายตาและทำให้ไอคอนแอปบนหน้าจอมือถือโดดเด่นยิ่งขึ้น" },
+        { q: "วอลเปเปอร์มินิมอลช่วยประหยัดแบตเตอรี่ไหม?", a: "หากหน้าจอมือถือของคุณเป็นจอแบบ OLED หรือ AMOLED การเลือกใชวอลเปเปอร์มินิมอลที่มีพื้นที่สีดำสนิท (AMOLED Black) จะช่วยปิดการทำงานของเม็ดพิกเซลและประหยัดแบตเตอรี่ได้เป็นอย่างดี" }
+      ]
+    }
   },
   vi: {
     anime: { name: "Hình nền Anime", blurb: "Hình minh họa vẽ tay ấm áp, mây mùa hè và phong cảnh hoài niệm." },
@@ -93,7 +114,13 @@ const categoryTranslations = {
     japanese: { name: "Hình nền Kiểu Nhật", blurb: "Ngôi đền truyền thống, hoa anh đào và bầu không khí ukiyo-e cổ điển." },
     neon: { name: "Hình nền Neon", blurb: "Đường vector phát sáng, bảng hiệu rực rỡ và hình khối ánh sáng điện tử." },
     supercar: { name: "Hình nền Siêu xe", blurb: "Siêu xe hypercar kỳ lạ, quái vật đường đua và phương tiện ý tưởng tương lai." },
-    luxury: { name: "Hình nền Sang trọng", blurb: "Điểm nhấn bằng vàng, đá cẩm thạch cao cấp và tính thẩm mỹ thanh lịch đẳng cấp." }
+    luxury: { name: "Hình nền Sang trọng", blurb: "Điểm nhấn bằng vàng, đá cẩm thạch cao cấp và tính thẩm mỹ thanh lịch đẳng cấp." },
+    minimal: {
+      name: "Hình nền Tối giản",
+      blurb: "Bố cục sạch sẽ, đường nét đơn giản và hình nền điện thoại tối giản thanh bình.",
+      seoTitle: "Về Bộ sưu tập Hình nền Tối giản",
+      seoText: "Tải xuống hình nền tối giản chất lượng cao cho iPhone hoặc Android của bạn. Bộ sưu tập chọn lọc của chúng tôi có các đường nét sạch sẽ, độ dốc pastel mềm mại và họa tiết AMOLED tối màu giúp tiết kiệm pin. Mỗi hình nền được tối ưu hóa cho màn hình dọc và được thử nghiệm đằng sau các biểu tượng để đảm bảo độ tương phản hoàn hảo."
+    }
   },
   lo: {
     anime: { name: "ວໍລເປເປີອານີເມະ", blurb: "ພາບວາດສະໄຕລ໌ອົບອຸ່ນ ເມກລະດູຮ້ອນ ແລະທິວທັດຍ້ອນວັນວານ." },
@@ -114,8 +141,14 @@ const categoryTranslations = {
     fantasy: { name: "ວໍລເປເປີແຟນຕາຊີ", blurb: "ທິວທັດມະຫັດສະຈັນ ວິຫານລັບ ແລະດິນແດນແຫ່ງຄວາມຝັນເໜືອຈິງ." },
     japanese: { name: "ວໍລເປເປີສະໄຕລ໌ຍີ່ປຸ່ນ", blurb: "ສານເຈົ້າດັ້ງເດີມ ດອກຊາກຸຣະບານ ແລະບັນຍາກາດຍີ່ປຸ່ນຄລາສສິກ." },
     neon: { name: "ວໍລເປເປີມນີອອນ", blurb: "ເສັ້ນເວັກເຕີເຮືອງແສງ ປ້າຍໄຟສີສັນສົດໃສ ແລະຮູບຊົງແສງນີອອນໄຟຟ້າ." },
-    supercar: { name: "ວໍລເປເປີຊູເປີຄາຣ໌", blurb: "ໄຮເປີຄາຣ໌ທີ່ແປກຕາ ສັດຮ້າຍໃນສະໜາມແข່ງ ແລະລົດແນວຄິດອະນາຄົດ." },
-    luxury: { name: "ວໍລເປເປີຄວາມຫຣູຫຣາ", blurb: "ການຕົບແຕ່ງສີທອງ ຫີນອ່ອນພຣີມຽມ ແລະຄວາມງາມລະດັບພຣີມຽມ." }
+    supercar: { name: "ວໍລເປເປີຊູເປີຄາຣ໌", blurb: "ໄຮເປີຄາຣ໌ທີ່ແປກຕາ ສັດຮ້າຍໃນສະໜາມແຂ່ງ ແລະລົດແນວຄິດອະນາຄົດ." },
+    luxury: { name: "ວໍລເປເປີຄວາມຫຣູຫຣາ", blurb: "ການຕົບແຕ່ງສີທອງ ຫີນອ່ອນພຣີມຽມ ແລະຄວາມງາມລະດັບພຣີມຽມ." },
+    minimal: {
+      name: "ວໍລເປເປີມິນິມອນ",
+      blurb: "ການອອກແບບທີ່ລຽບງ່າຍ ລາຍເສັ້ນທີ່ສະອາດຕາ ແລະພື້ນຫຼັງສະໄຕລ໌ມິນິມອນທີ່ສະບາຍຕາ.",
+      seoTitle: "ກ່ຽວກັບຄໍເລັກຊັນວໍລເປເປີມິນິມອນ",
+      seoText: "ດາວໂຫຼດວໍລເປເປີມິນິມອນ (Minimalist Wallpapers) ຄຸນນະພາບສູງສຳລັບສະມາດໂຟນ iPhone ແລະ Android. ຄໍເລັກຊັນຂອງພວກເຮົາເນັ້ນການອອກແບບທີ່ລຽບງ່າຍ, ລາຍເສັ້ນສະອາດຕາ ແລະ ໂທນສີພັດເທລທີ່ສະບາຍຕາ."
+    }
   },
   km: {
     anime: { name: "រូបភាពផ្ទៃក្រោយអានីម៉េ", blurb: "គំនូរគូរដោយដៃដ៏កក់ក្តៅ ពពកនារដូវក្តៅ និងទេសភាពអាឡោះអាល័យ។" },
@@ -130,14 +163,24 @@ const categoryTranslations = {
     car: { name: "រូបភាពផ្ទៃក្រោយឡាន", blurb: "រថយន្តប្រើប្រាស់ប្រចាំថ្ងៃដ៏ស្រស់ស្អាត រថយន្តបុរាណ និងរថយន្តកម្លាំងខ្លាំង។" },
     nature: { name: "រូបភាពផ្ទៃក្រោយធម្មជាតិ", blurb: "ទេសភាពដ៏ស្រស់ស្អាត ព្រៃឈើគ្របដណ្តប់ដោយអ័ព្ទ និងធម្មជាតិដ៏ស្ងប់ស្ងាត់។" },
     space: { name: "រូបភាពផ្ទៃក្រោយលំហ", blurb: "ណេប៊ុឡាលំហជ្រៅ ផ្កាយដ៏អាថ៌កំបាំង និងច្រកទ្វារសកលលោកផ្សេងទៀត។" },
-    gaming: { name: "រូបភាពផ្ទៃក្រោយហ្គេមមីង", blurb: "ការរៀបចំតុហ្គេមដ៏អស្ចาร្យ ពិភពសិប្បនិម្មិត និងសិល្បៈឧបករណ៍បញ្ជា។" },
+    gaming: { name: "រូបភាពផ្ទៃក្រោយហ្គេមមីង", blurb: "ការរៀបចំតុហ្គេមដ៏អស្ចារ្យ ពិភពសិប្បនិម្មិត និងសិល្បៈឧបករណ៍បញ្ជា។" },
     cute: { name: "រូបភាពផ្ទៃក្រោយគួរឱ្យស្រឡាញ់", blurb: "តួអង្គ Chibi សត្វគួរឱ្យស្រឡាញ់ និងសិល្បៈដីឥដ្ឋពណ៌ទន់ភ្លន់។" },
     dark: { name: "រូបភាពផ្ទៃក្រោយងងឹត", blurb: "ស្រមោលអាថ៌កំបាំង ការរចនាបែបហ្គោធិក និងស្បែកទូរស័ព្ទងងឹត។" },
     fantasy: { name: "រូបភាពផ្ទៃក្រោយរឿងនិទាន", blurb: "ទេសភាពវេទមន្ត វិហារលាក់កំបាំង និងពិភពសុបិនដ៏អស្ចារ្យ។" },
     japanese: { name: "រូបភាពផ្ទៃក្រោយជប៉ុន", blurb: "វិហារបុរាណ ផ្កាសាគូរ៉ា និងបរិយាកាសគំនូរបុរាណជប៉ុន Ukiyo-e។" },
     neon: { name: "រូបភាពផ្ទៃក្រោយណេអុង", blurb: "ខ្សែកោងណេអុងភ្លឺ បន្ទះសញ្ញាដ៏រស់រវើក និងរាងពន្លឺអគ្គិសនី。" },
     supercar: { name: "រូបភាពផ្ទៃក្រោយឡានទំនើប", blurb: "រថយន្តល្បឿនលឿន Hypercars និងរថយន្តគំនិតនាពេលអនាគត។" },
-    luxury: { name: "រូបភាពផ្ទៃក្រោយប្រណីត", blurb: "ការរចនាពណ៌មាស ថ្មម៉ាបលំដាប់ខ្ពស់ និងសោភ័ណភាពដ៏ប្រណីត。" }
+    luxury: { name: "រូបភាពផ្ទៃក្រោយប្រណីត", blurb: "ការរចនាពណ៌មាស ថ្មម៉ាបលំដាប់ខ្ពស់ និងសោភ័ណភាពដ៏ប្រណីត。" },
+    minimal: {
+      name: "រូបភាពផ្ទៃក្រោយសាមញ្ញ",
+      blurb: "ការរចនាដ៏សាមញ្ញ ខ្សែបន្ទាត់ស្អាតៗ និងផ្ទៃខាងក្រោយទូរស័ព្ទបែបសាមញ្ញដ៏ស្ងប់ស្ងាត់។",
+      seoTitle: "អំពីបណ្តុំរូបភាពផ្ទៃក្រោយបែបសាមញ្ញ",
+      seoText: "ទាញយករូបភាពផ្ទៃក្រោយបែបសាមញ្ញ (Minimalist Wallpapers) គុណភាពខ្ពស់សម្រាប់ទូរស័ព្ទ iPhone និង Android របស់អ្នក។ ការរចនាដ៏សាមញ្ញ ខ្សែបន្ទាត់ស្អាតៗ និងផ្ទៃខាងក្រោយដ៏សាមញ្ញដ៏ស្ងប់ស្ងាត់។",
+      faqs: [
+        { q: "តើអ្វីទៅជារូបភាពផ្ទៃក្រោយបែបសាមញ្ញ?", a: "រូបភាពផ្ទៃក្រោយបែបសាមញ្ញផ្តោតលើភាពសាមញ្ញ ប្រើក្ដារពណ៌ដែលមានកំណត់ ខ្សែបន្ទាត់ស្អាតៗ និងធាតុក្រាហ្វិកតិចតួចបំផុត ដើម្បីបង្កើតជាផ្ទៃខាងក្រោយទូរស័ព្ទដ៏ស្ងប់ស្ងាត់។" },
+        { q: "តើរូបភាពផ្ទៃក្រោយបែបសាមញ្ញជួយសន្សំសំចៃថ្មទូរស័ព្ទដែរឬទេ?", a: "បាទ/ចាស ប្រសិនបើអ្នកប្រើអេក្រង់ OLED ឬ AMOLED ការជ្រើសរើសរូបភាពផ្ទៃក្រោយបែបសាមញ្ញដែលមានផ្ទៃពណ៌ខ្មៅសុទ្ធ (AMOLED Black) នឹងជួយបិទភីកសែល និងសន្សំសំចៃថ្មបានយ៉ាងល្អ។" }
+      ]
+    }
   },
   my: {
     anime: { name: "အန်နီမေး နောက်ခံပုံများ", blurb: "နွေးထွေးသော လက်ဆွဲပန်းချီများ၊ နွေရာသီ တိမ်တိုက်များနှင့် လွမ်းဆွတ်ဖွယ် ရှုခင်းများ။" },
@@ -159,7 +202,13 @@ const categoryTranslations = {
     japanese: { name: "ဂျပန်စတိုင် နောက်ခံပုံများ", blurb: "ရိုးရာဘုရားကျောင်းများ၊ ချယ်ရီပန်းများနှင့် ဂျပန်ဂန္ထဝင် အငွေ့အသက်များ။" },
     neon: { name: "နီယွန် နောက်ခံပုံများ", blurb: "တောက်ပသော ဗက်တာမျဉ်းများ၊ တောက်ပသော ဆိုင်းဘုတ်များနှင့် လျှပ်စစ်မီးလုံးများ။" },
     supercar: { name: "စူပါကား နောက်ခံပုံများ", blurb: "ခေတ်မီဆန်းသစ်သော ဟိုက်ပါကားများ၊ ပြိုင်ကွင်းကားများနှင့် အနာဂတ်ကားများ။" },
-    luxury: { name: "ဇိမ်ခံ နောက်ခံပုံများ", blurb: "ရွှေရောင်အဆင်တန်ဆာများ၊ အဆင့်မြင့် စကျင်ကျောက်များနှင့် အဆင့်အတန်းမြင့် အနုပညာ။" }
+    luxury: { name: "ဇိမ်ခံ နောက်ခံပုံများ", blurb: "ရွှေရောင်အဆင်တန်ဆာများ၊ အဆင့်မြင့် စကျင်ကျောက်များနှင့် အဆင့်အတန်းမြင့် အနုပညာ။" },
+    minimal: {
+      name: "ရိုးရှင်းသော နောက်ခံပုံများ",
+      blurb: "သပ်ရပ်သောပုံစံများ၊ ရိုးရှင်းသောလိုင်းများနှင့် အေးချမ်းသာယာသော ရိုးရှင်းသည့် ဖုန်းနောက်ခံပုံများ။",
+      seoTitle: "ရိုးရှင်းသောဖုန်းနောက်ခံပုံများစုစည်းမှုအကြောင်း",
+      seoText: "သင့်ဖုန်းအတွက် အရည်အသွေးမြင့် ရိုးရှင်းသော နောက်ခံပုံများကို ဒေါင်းလုဒ်လုပ်ပါ။ သန့်ရှင်းသပ်ရပ်သောလိုင်းများ၊ ပက်စတယ်အရောင်များနှင့် ဘက်ထရီသက်သာစေသည့် အမည်းရောင်ဒီဇိုင်းများ ပါဝင်သည်။"
+    }
   }
 };
 
@@ -224,7 +273,23 @@ function updateDictionaries() {
     let catBlock = "  categories: {\n";
     for (const slug of categorySlugs) {
       const entry = trans[slug];
-      catBlock += `    ${slug}: { name: "${entry.name}", blurb: "${entry.blurb.replace(/"/g, '\\"')}" },\n`;
+      catBlock += `    ${slug}: { name: "${entry.name}", blurb: "${entry.blurb.replace(/"/g, '\\"')}"`;
+      if (entry.seoTitle) {
+        catBlock += `, seoTitle: "${entry.seoTitle.replace(/"/g, '\\"')}"`;
+      } else {
+        catBlock += `, seoTitle: ""`;
+      }
+      if (entry.seoText) {
+        catBlock += `, seoText: "${entry.seoText.replace(/"/g, '\\"')}"`;
+      } else {
+        catBlock += `, seoText: ""`;
+      }
+      if (entry.faqs) {
+        catBlock += `, faqs: ${JSON.stringify(entry.faqs)}`;
+      } else {
+        catBlock += `, faqs: []`;
+      }
+      catBlock += ` },\n`;
     }
     catBlock += "  },";
     
