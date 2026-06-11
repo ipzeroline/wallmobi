@@ -112,6 +112,11 @@ export default async function LocaleLayout({
     <html lang={localeHtmlLang[l]} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <ThemeScript />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6050187312967047"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <GoogleAnalytics />
