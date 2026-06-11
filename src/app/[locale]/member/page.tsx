@@ -8,7 +8,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { site } from "@/lib/site";
 import DownloadButton from "@/components/DownloadButton";
-import { imageExtension, wallpaperImageUrl } from "@/lib/wallpaper-url";
+import { wallpaperImageUrl } from "@/lib/wallpaper-url";
 
 type Screen = "login" | "register" | "forgot" | "dashboard";
 type Tab = "profile" | "favorites" | "history";
@@ -773,8 +773,8 @@ export default function MemberPage() {
                                   </Link>
                                   <div style={{ width: "120px" }}>
                                     <DownloadButton
-                                      src={wp.src}
-                                      filename={`${wp.slug}${imageExtension(wp.src)}`}
+                                      slug={wp.slug}
+                                      filename={wp.filename || `${wp.slug}.png`}
                                       labels={{ download: t.downloadAgain, preparing: dict.detail.preparing, saved: dict.detail.saved }}
                                       locale={l}
                                     />

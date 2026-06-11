@@ -1,6 +1,6 @@
-# CDN Migration
+# CDN Storage
 
-WallMobi supports Cloudinary for new admin uploads while keeping old local image URLs working.
+WallMobi stores new admin uploads on Cloudinary/CDN. Local wallpaper URLs still work for old bundled files and previously uploaded rows until they are migrated.
 
 Add these values to `.env.local`:
 
@@ -12,8 +12,9 @@ CLOUDINARY_UPLOAD_FOLDER=wallmobi/wallpapers/uploads
 ```
 
 Behavior:
-- If Cloudinary env values are present, new Admin uploads are stored on Cloudinary and the database stores the Cloudinary `secure_url`.
-- If Cloudinary env values are missing, uploads continue to use `public/wallpapers/uploads`.
+- New Admin uploads require Cloudinary env values and are stored on Cloudinary.
+- The database stores the Cloudinary `secure_url`.
+- If Cloudinary env values are missing, Admin uploads fail instead of writing to `public/wallpapers/uploads`.
 - Existing local image URLs keep working.
 - Migration never deletes local files.
 

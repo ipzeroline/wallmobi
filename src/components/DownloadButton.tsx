@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function DownloadButton({
-  src,
+  slug,
   filename,
   labels,
   locale = "en",
 }: {
-  src: string;
+  slug: string;
   filename: string;
   labels: { download: string; preparing: string; saved: string };
   locale?: string;
@@ -41,7 +41,6 @@ export default function DownloadButton({
     try {
       setState("busy");
       setShowGuestChoice(false);
-      const slug = filename.replace(/\.[a-zA-Z0-9]+$/, "");
       const res = await fetch(`/api/downloads/secure?slug=${slug}`);
 
       if (!res.ok) {

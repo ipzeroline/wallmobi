@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
 import { isSafeSlug, serverErrorResponse } from "@/lib/api-response";
+import { imageExtension } from "@/lib/wallpaper-url";
 
 export async function GET(req: Request) {
   try {
@@ -25,7 +26,13 @@ export async function GET(req: Request) {
       [locale, user.id]
     );
 
-    return NextResponse.json({ success: true, downloads: rows });
+    const downloads = (rows as any[]).map((row) => ({
+      ...row,
+      filename: `${row.slug}${imageExtension(row.src)}`,
+      src: undefined,
+    }));
+
+    return NextResponse.json({ success: true, downloads });
   } catch (err: any) {
     console.error("Downloads list error:", err);
     return serverErrorResponse(err.message);

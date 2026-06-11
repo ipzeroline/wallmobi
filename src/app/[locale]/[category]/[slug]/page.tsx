@@ -491,7 +491,7 @@ export default async function WallpaperPage({
           </div>
 
           <DownloadButton
-            src={wp.src}
+            slug={wp.slug}
             filename={downloadFilename}
             labels={{ download: dict.detail.download, preparing: dict.detail.preparing, saved: dict.detail.saved }}
             locale={l}

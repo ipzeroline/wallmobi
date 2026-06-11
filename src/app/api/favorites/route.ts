@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     const locale = searchParams.get("locale") || "en";
 
     const [rows] = await pool.query(
-      `SELECT f.wallpaper_slug as slug, w.src, w.category_slug as category,
+      `SELECT f.wallpaper_slug as slug, w.category_slug as category,
               COALESCE(t.title, t_en.title, 'Untitled') as title
        FROM user_favorites f
        JOIN wallpapers w ON w.slug = f.wallpaper_slug

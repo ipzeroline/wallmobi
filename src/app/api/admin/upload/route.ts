@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
-import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import sharp from "sharp";
@@ -48,10 +47,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Uploaded file is not a valid image" }, { status: 400 });
     }
 
-    // Ensure upload directory exists
-    const uploadDir = path.join(process.cwd(), "public", "wallpapers", "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    if (!isCloudinaryConfigured()) {
+      return NextResponse.json(
+        { error: "CDN upload is not configured. Please set Cloudinary environment variables before uploading images." },
+        { status: 503 }
+      );
     }
 
     // Clean up filename and make it unique
@@ -63,31 +63,20 @@ export async function POST(req: Request) {
       .replace(/-+/g, "-");
     
     const filename = `${nameWithoutExt}-${randomHex}${ext}`;
-    let publicUrl = `/wallpapers/uploads/${filename}`;
-    let storage: "cloudinary" | "local" = "local";
-    let cloudinaryPublicId: string | undefined;
 
-    if (isCloudinaryConfigured()) {
-      const uploaded = await uploadImageToCloudinary({
-        buffer,
-        filename,
-        mimeType: mimeTypeFromExt(ext),
-      });
-      publicUrl = uploaded.secure_url;
-      storage = "cloudinary";
-      cloudinaryPublicId = uploaded.public_id;
-    } else {
-      const filePath = path.join(uploadDir, filename);
-      fs.writeFileSync(filePath, buffer);
-    }
+    const uploaded = await uploadImageToCloudinary({
+      buffer,
+      filename,
+      mimeType: mimeTypeFromExt(ext),
+    });
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
+      url: uploaded.secure_url,
       filename,
       ext,
-      storage,
-      cloudinaryPublicId,
+      storage: "cloudinary",
+      cloudinaryPublicId: uploaded.public_id,
       width: metadata.width || 1080,
       height: metadata.height || 2340,
       format: metadata.format || ext.replace(".", ""),
