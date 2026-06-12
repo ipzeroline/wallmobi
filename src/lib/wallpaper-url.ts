@@ -6,6 +6,13 @@ export function wallpaperImageUrl(slug: string, options?: { width?: number }) {
   return `/api/wallpapers/image?${params.toString()}`;
 }
 
+export function absoluteWallpaperSourceUrl(src: string, origin: string) {
+  if (/^https?:\/\//i.test(src)) return src;
+  const normalizedOrigin = origin.replace(/\/$/, "");
+  const normalizedSrc = src.startsWith("/") ? src : `/${src}`;
+  return `${normalizedOrigin}${normalizedSrc}`;
+}
+
 export function imageExtension(src: string) {
   const pathname = /^https?:\/\//i.test(src) ? new URL(src).pathname : src;
   const match = pathname.match(/\.(png|jpe?g|webp|gif|svg)$/i);

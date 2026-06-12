@@ -8,7 +8,7 @@ import { alternates } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { formatDownloads } from "@/lib/wallpapers";
 import { getDbWallpaper, getDbRelated, getDbWallpapers } from "@/lib/db-wallpapers";
-import { wallpaperImageUrl } from "@/lib/wallpaper-url";
+import { absoluteWallpaperSourceUrl, imageMimeType, wallpaperImageUrl } from "@/lib/wallpaper-url";
 import WallpaperCard from "@/components/WallpaperCard";
 import DownloadButton from "@/components/DownloadButton";
 import FullscreenPreview from "@/components/FullscreenPreview";
@@ -290,6 +290,7 @@ export default async function WallpaperPage({
 
   const previewSrc = wallpaperImageUrl(wp.slug, { width: 1280 });
   const previewImageUrl = `${site.url}${wallpaperImageUrl(wp.slug, { width: 1200 })}`;
+  const structuredImageUrl = absoluteWallpaperSourceUrl(wp.src, site.url);
   const pageUrl = `${site.url}/${l}/${wp.category}-wallpapers/${wp.slug}`;
   const seoCopy = wallpaperSeoCopy({
     locale: l,
@@ -371,11 +372,11 @@ export default async function WallpaperPage({
         "@id": `${pageUrl}#primaryimage`,
         name: seoCopy.displayTitle,
         description: seoCopy.description,
-        contentUrl: previewImageUrl,
-        thumbnailUrl: previewImageUrl,
+        contentUrl: structuredImageUrl,
+        thumbnailUrl: structuredImageUrl,
         width: wp.width,
         height: wp.height,
-        encodingFormat: "image/webp",
+        encodingFormat: imageMimeType(wp.src),
         datePublished: wp.published,
         creditText: site.name,
         creator: { "@type": "Organization", name: site.author },
