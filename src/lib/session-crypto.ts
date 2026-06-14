@@ -1,7 +1,12 @@
 const fallbackCookieSecret = "wallmobi_cookie_secure_signing_salt_2026";
 
 function getCookieSecret() {
-  const secret = process.env.SESSION_SECRET || process.env.COOKIE_SECRET;
+  const secret =
+    process.env.SESSION_SECRET ||
+    process.env.COOKIE_SECRET ||
+    process.env.AUTH_SECRET ||
+    process.env.GOOGLE_CLIENT_SECRET ||
+    process.env.DB_PASSWORD;
   if (secret) return secret;
   if (process.env.NODE_ENV === "production") {
     throw new Error("SESSION_SECRET is required in production.");

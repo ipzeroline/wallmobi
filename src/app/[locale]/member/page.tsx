@@ -102,6 +102,20 @@ export default function MemberPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const authError = new URLSearchParams(window.location.search).get("authError");
+    if (!authError) return;
+
+    setErrorMsg(
+      l === "th"
+        ? "เข้าสู่ระบบด้วย Google ไม่สำเร็จ กรุณาลองอีกครั้ง หรือสมัครด้วยอีเมล"
+        : "Google sign-in failed. Please try again or sign up with email."
+    );
+    setScreen(getGuestScreen());
+    router.replace(`/${l}/member${typeof window !== "undefined" ? window.location.hash : ""}`);
+  }, [l, router]);
+
   // UI translations
   const t = {
     titleLogin: l === "th" ? "เข้าสู่ระบบเพื่อดาวน์โหลดไม่มีลายน้ำ" : "Sign in for watermark-free downloads",

@@ -60,10 +60,10 @@ export async function POST(req: Request) {
     // Reset rate limit count on successful registration
     await resetRateLimitAttempts(ip, "register");
 
-    // Send Telegram Alert (Non-blocking so it doesn't delay registration response)
+    // Send Telegram alert after the account is created. The helper catches its own errors.
     const formattedDate = new Date().toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
     const tgMessage = `🔔 <b>มีสมาชิกใหม่ลงทะเบียน! (อีเมล)</b>\n\n👤 <b>ชื่อ:</b> ${name}\n✉️ <b>อีเมล:</b> ${emailLower}\n🔑 <b>ช่องทาง:</b> Email/Password\n📅 <b>เวลา:</b> ${formattedDate}`;
-    sendTelegramNotification(tgMessage).catch((e) => console.error("Telegram error:", e));
+    await sendTelegramNotification(tgMessage);
 
     return NextResponse.json({ success: true, user: { name, email: emailLower } });
   } catch (err: any) {

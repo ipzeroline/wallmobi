@@ -19,10 +19,21 @@ export async function GET(req: Request) {
   cookieStore.delete("google_oauth_locale");
   cookieStore.delete("google_oauth_origin");
 
+  const redirectWithError = (reason = "google") => {
+    const params = new URLSearchParams({ authError: reason });
+    return NextResponse.redirect(`${savedOrigin}/${savedLocale}/member?${params.toString()}`);
+  };
+
   try {
     const { searchParams } = new URL(req.url);
     const code = searchParams.get("code");
     const state = searchParams.get("state");
+    const googleError = searchParams.get("error");
+
+    if (googleError) {
+      console.error("Google OAuth returned error:", googleError, searchParams.get("error_description"));
+      return redirectWithError(googleError);
+    }
 
     // 1. CSRF Verification
     if (!state || !savedState || state !== savedState) {
@@ -104,10 +115,10 @@ export async function GET(req: Request) {
       );
       userId = (result as any).insertId;
 
-      // Send Telegram Alert for Google Signup (Non-blocking)
+      // Send Telegram alert for Google signup. The helper catches its own errors.
       const formattedDate = new Date().toLocaleString("th-TH", { timeZone: "Asia/Bangkok" });
       const tgMessage = `🔔 <b>มีสมาชิกใหม่ลงทะเบียน! (Google)</b>\n\n👤 <b>ชื่อ:</b> ${name}\n✉️ <b>อีเมล:</b> ${email}\n🔑 <b>ช่องทาง:</b> Google Login\n📅 <b>เวลา:</b> ${formattedDate}`;
-      sendTelegramNotification(tgMessage).catch((e) => console.error("Telegram error:", e));
+      await sendTelegramNotification(tgMessage);
     }
 
     // 5. Establish Session (Unique token preventing concurrent logins)
@@ -117,6 +128,6 @@ export async function GET(req: Request) {
     return NextResponse.redirect(`${savedOrigin}/${savedLocale}/member`);
   } catch (err: any) {
     console.error("Google authentication error:", err);
-    return new Response(process.env.NODE_ENV === "production" ? "Google authentication failed" : "Google authentication failed: " + err.message, { status: 500 });
+    return redirectWithError("google");
   }
 }
