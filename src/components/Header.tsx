@@ -9,10 +9,13 @@ import MemberNavButton from "./MemberNavButton";
 
 export default function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const base = `/${locale}`;
+  const reviewsLabel = locale === "th" ? "รีวิว" : "Reviews";
+  const showReviews = locale === "en" || locale === "th";
   const primaryLinks = [
     { href: base, label: dict.nav.home },
     { href: `${base}/gallery`, label: dict.nav.gallery },
     { href: `${base}/blog`, label: dict.nav.blog },
+    ...(showReviews ? [{ href: `${base}/reviews`, label: reviewsLabel }] : []),
     { href: `${base}/search`, label: dict.nav.search },
     { href: `${base}/member`, label: locale === "th" ? "บัญชีผู้ใช้" : "Account" },
     { href: `${base}/about`, label: dict.nav.about },
@@ -30,6 +33,7 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
           <Link href={base}>{dict.nav.home}</Link>
           <Link href={`${base}/gallery`}>{dict.nav.gallery}</Link>
           <Link href={`${base}/blog`}>{dict.nav.blog}</Link>
+          {showReviews && <Link href={`${base}/reviews`}>{reviewsLabel}</Link>}
           <details className="nav-menu">
             <summary>{dict.nav.categories}</summary>
             <div className="nav-menu-list">

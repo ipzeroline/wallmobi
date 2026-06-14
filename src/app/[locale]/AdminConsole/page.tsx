@@ -9,7 +9,7 @@ import { getDictionary } from "@/i18n";
 import { isLocale } from "@/i18n/config";
 import { wallpaperImageUrl } from "@/lib/wallpaper-url";
 
-type Tab = "overview" | "wallpapers" | "users";
+type Tab = "overview" | "wallpapers" | "reviews" | "users";
 const WALLPAPERS_PER_PAGE = 20;
 
 export default function AdminDashboard() {
@@ -40,6 +40,7 @@ export default function AdminDashboard() {
   const [wallpapersList, setWallpapersList] = useState<any[]>([]);
   const [wallpapersTotal, setWallpapersTotal] = useState(0);
   const [usersList, setUsersList] = useState<any[]>([]);
+  const [reviewsList, setReviewsList] = useState<any[]>([]);
 
   // Search and Pagination States
   const [userSearchQuery, setUserSearchQuery] = useState("");
@@ -47,6 +48,7 @@ export default function AdminDashboard() {
   const [debouncedWpSearchQuery, setDebouncedWpSearchQuery] = useState("");
   const [wpCategoryFilter, setWpCategoryFilter] = useState("all");
   const [previewWp, setPreviewWp] = useState<any | null>(null);
+  const [reviewStatusFilter, setReviewStatusFilter] = useState("pending");
   const [wpCurrentPage, setWpCurrentPage] = useState(1);
   const [userCurrentPage, setUserCurrentPage] = useState(1);
 
@@ -74,6 +76,7 @@ export default function AdminDashboard() {
           setCurrentUser(data.user);
           loadStats();
           loadWallpapers();
+          loadReviews();
           if (data.user.role === "super_admin") {
             loadUsers();
           }
@@ -106,6 +109,12 @@ export default function AdminDashboard() {
       loadWallpapersPage(wpCurrentPage);
     }
   }, [activeTab, activeLocale, currentUser, wpCategoryFilter, wpCurrentPage, debouncedWpSearchQuery]);
+
+  useEffect(() => {
+    if (currentUser && activeTab === "reviews") {
+      loadReviews(reviewStatusFilter);
+    }
+  }, [activeTab, currentUser, reviewStatusFilter]);
 
   const loadStats = async () => {
     try {
@@ -155,6 +164,19 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       console.error("Failed to load users:", err);
+    }
+  };
+
+  const loadReviews = async (status = reviewStatusFilter) => {
+    try {
+      const params = new URLSearchParams({ status });
+      const res = await fetch(`/api/admin/reviews?${params.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        setReviewsList(data.reviews || []);
+      }
+    } catch (err) {
+      console.error("Failed to load reviews:", err);
     }
   };
 
@@ -373,6 +395,50 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateReview = async (reviewId: number, status: "approved" | "rejected" | "pending") => {
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    try {
+      const res = await fetch("/api/admin/reviews", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: reviewId, status }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setSuccessMsg(locale === "th" ? "อัปเดตรีวิวเรียบร้อยแล้ว" : "Review updated successfully.");
+        loadReviews();
+        loadStats();
+      } else {
+        setErrorMsg(data.error || "Failed to update review.");
+      }
+    } catch {
+      setErrorMsg("Error updating review.");
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: number) => {
+    if (!confirm(locale === "th" ? "ต้องการลบรีวิวนี้หรือไม่?" : "Delete this review?")) return;
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    try {
+      const res = await fetch(`/api/admin/reviews?id=${reviewId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (res.ok) {
+        setSuccessMsg(locale === "th" ? "ลบรีวิวเรียบร้อยแล้ว" : "Review deleted successfully.");
+        loadReviews();
+        loadStats();
+      } else {
+        setErrorMsg(data.error || "Failed to delete review.");
+      }
+    } catch {
+      setErrorMsg("Error deleting review.");
+    }
+  };
+
   // Wallpapers search, filter & pagination
   const totalWpPages = Math.max(1, Math.ceil(wallpapersTotal / WALLPAPERS_PER_PAGE));
   const visibleWallpapers = wallpapersList;
@@ -447,6 +513,13 @@ export default function AdminDashboard() {
         >
           Wallpapers ({wallpapersList.length})
         </button>
+        <button
+          className={`chip ${activeTab === "reviews" ? "active" : ""}`}
+          onClick={() => { setActiveTab("reviews"); setErrorMsg(""); setSuccessMsg(""); }}
+          data-active={activeTab === "reviews"}
+        >
+          {locale === "th" ? "รีวิว" : "Reviews"} ({stats.pendingReviews || 0})
+        </button>
         {currentUser.role === "super_admin" && (
           <button
             className={`chip ${activeTab === "users" ? "active" : ""}`}
@@ -478,6 +551,14 @@ export default function AdminDashboard() {
             <div style={{ background: "linear-gradient(135deg, rgba(255, 45, 85, 0.15), rgba(255, 45, 85, 0.05))", border: "1px solid rgba(255, 45, 85, 0.2)", padding: "1.8rem", borderRadius: "16px", textAlign: "center" }}>
               <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "#ff2d55" }}>{stats.totalFavorites}</div>
               <div style={{ fontSize: "0.85rem", color: "var(--text-2)", fontWeight: 600, marginTop: "4px" }}>User Favorites</div>
+            </div>
+            <div style={{ background: "linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 122, 255, 0.05))", border: "1px solid rgba(0, 122, 255, 0.2)", padding: "1.8rem", borderRadius: "16px", textAlign: "center" }}>
+              <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "#007aff" }}>{stats.pendingReviews || 0}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-2)", fontWeight: 600, marginTop: "4px" }}>Pending Reviews</div>
+            </div>
+            <div style={{ background: "linear-gradient(135deg, rgba(52, 199, 89, 0.15), rgba(52, 199, 89, 0.05))", border: "1px solid rgba(52, 199, 89, 0.2)", padding: "1.8rem", borderRadius: "16px", textAlign: "center" }}>
+              <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "#34c759" }}>{stats.approvedReviews || 0}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-2)", fontWeight: 600, marginTop: "4px" }}>Approved Reviews</div>
             </div>
           </div>
 
@@ -704,6 +785,109 @@ export default function AdminDashboard() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* C. TAB: REVIEWS */}
+      {activeTab === "reviews" && (
+        <div style={{ background: "var(--bg-alt)", border: "1px solid var(--line)", borderRadius: "20px", overflow: "hidden" }}>
+          <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <h3 style={{ margin: 0, fontSize: "1.05rem" }}>{locale === "th" ? "อนุมัติรีวิวสมาชิก" : "Member Review Approval"}</h3>
+              <p style={{ margin: "0.25rem 0 0", color: "var(--text-3)", fontSize: "0.85rem" }}>
+                {locale === "th" ? "รีวิวจะแสดงบนหน้า SEO หลังอนุมัติเท่านั้น" : "Reviews appear on the SEO page only after approval."}
+              </p>
+            </div>
+            <select
+              value={reviewStatusFilter}
+              onChange={(e) => setReviewStatusFilter(e.target.value)}
+              style={{ padding: "8px 12px", fontSize: "0.85rem", borderRadius: "10px", background: "var(--bg)", border: "1px solid var(--line)" }}
+            >
+              <option value="pending">{locale === "th" ? "รออนุมัติ" : "Pending"}</option>
+              <option value="approved">{locale === "th" ? "อนุมัติแล้ว" : "Approved"}</option>
+              <option value="rejected">{locale === "th" ? "ปฏิเสธแล้ว" : "Rejected"}</option>
+              <option value="all">{locale === "th" ? "ทั้งหมด" : "All"}</option>
+            </select>
+          </div>
+
+          {reviewsList.length === 0 ? (
+            <div style={{ padding: "2rem 1.5rem", color: "var(--text-3)" }}>
+              {locale === "th" ? "ไม่มีรีวิวในสถานะนี้" : "No reviews in this status."}
+            </div>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem", textAlign: "left" }}>
+                <thead>
+                  <tr style={{ background: "rgba(0,0,0,0.02)", borderBottom: "1px solid var(--line)" }}>
+                    <th style={{ padding: "12px 16px" }}>Review</th>
+                    <th style={{ padding: "12px 16px" }}>Member</th>
+                    <th style={{ padding: "12px 16px" }}>Status</th>
+                    <th style={{ padding: "12px 16px" }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reviewsList.map((review) => (
+                    <tr key={review.id} style={{ borderBottom: "1px solid var(--line)", verticalAlign: "top" }}>
+                      <td style={{ padding: "12px 16px", minWidth: "340px" }}>
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "6px", flexWrap: "wrap" }}>
+                          <strong style={{ color: "var(--text-1)" }}>{review.title}</strong>
+                          <span className="chip" style={{ fontSize: "0.75rem", padding: "2px 8px" }}>{review.locale}</span>
+                          <span style={{ color: "var(--accent)", fontWeight: 700 }}>{review.rating}/5</span>
+                        </div>
+                        <p style={{ margin: 0, color: "var(--text-2)", lineHeight: 1.55, whiteSpace: "pre-line" }}>{review.body}</p>
+                        <div style={{ marginTop: "8px", color: "var(--text-3)", fontSize: "0.78rem" }}>
+                          {new Date(review.created_at).toLocaleString(locale)}
+                        </div>
+                      </td>
+                      <td style={{ padding: "12px 16px", minWidth: "180px" }}>
+                        <div style={{ fontWeight: 600, color: "var(--text-1)" }}>{review.reviewer_name}</div>
+                        <div style={{ color: "var(--text-3)", fontSize: "0.78rem" }}>{review.reviewer_email}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <span
+                          className="chip"
+                          style={{
+                            fontSize: "0.75rem",
+                            padding: "2px 8px",
+                            background: review.status === "approved" ? "rgba(52, 199, 89, 0.15)" : review.status === "rejected" ? "rgba(255, 69, 58, 0.12)" : "rgba(255, 149, 0, 0.14)",
+                            color: review.status === "approved" ? "#30d158" : review.status === "rejected" ? "#ff453a" : "#ff9500",
+                          }}
+                        >
+                          {review.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: "12px 16px", minWidth: "220px" }}>
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                          {review.status !== "approved" && (
+                            <button
+                              onClick={() => handleUpdateReview(review.id, "approved")}
+                              style={{ padding: "5px 10px", fontSize: "0.78rem", border: "1px solid rgba(52, 199, 89, 0.25)", borderRadius: "8px", background: "rgba(52, 199, 89, 0.1)", color: "#30d158", cursor: "pointer" }}
+                            >
+                              {locale === "th" ? "อนุมัติ" : "Approve"}
+                            </button>
+                          )}
+                          {review.status !== "rejected" && (
+                            <button
+                              onClick={() => handleUpdateReview(review.id, "rejected")}
+                              style={{ padding: "5px 10px", fontSize: "0.78rem", border: "1px solid rgba(255, 149, 0, 0.25)", borderRadius: "8px", background: "rgba(255, 149, 0, 0.08)", color: "#ff9500", cursor: "pointer" }}
+                            >
+                              {locale === "th" ? "ปฏิเสธ" : "Reject"}
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDeleteReview(review.id)}
+                            style={{ padding: "5px 10px", fontSize: "0.78rem", border: "1px solid rgba(255, 69, 58, 0.2)", borderRadius: "8px", background: "none", color: "#ff453a", cursor: "pointer" }}
+                          >
+                            {locale === "th" ? "ลบ" : "Delete"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 

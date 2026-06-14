@@ -14,6 +14,8 @@ export async function GET() {
     const [userCount] = await pool.query("SELECT COUNT(*) as count FROM users");
     const [dlCount] = await pool.query("SELECT COUNT(*) as count FROM user_downloads");
     const [favCount] = await pool.query("SELECT COUNT(*) as count FROM user_favorites");
+    const [pendingReviews] = await pool.query("SELECT COUNT(*) as count FROM reviews WHERE status = 'pending'");
+    const [approvedReviews] = await pool.query("SELECT COUNT(*) as count FROM reviews WHERE status = 'approved'");
 
     const [topDownloaded] = await pool.query(
       "SELECT slug, downloads_count, src FROM wallpapers ORDER BY downloads_count DESC LIMIT 5"
@@ -25,6 +27,8 @@ export async function GET() {
         totalUsers: (userCount as any)[0].count,
         totalDownloads: (dlCount as any)[0].count,
         totalFavorites: (favCount as any)[0].count,
+        pendingReviews: (pendingReviews as any)[0].count,
+        approvedReviews: (approvedReviews as any)[0].count,
       },
       topDownloaded,
     });

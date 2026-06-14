@@ -56,5 +56,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
   }
+  const reviewLanguages = {
+    en: `${site.url}/en/reviews`,
+    th: `${site.url}/th/reviews`,
+    "x-default": `${site.url}/en/reviews`,
+  };
+  for (const l of ["en", "th"] as const) {
+    entries.push({
+      url: `${site.url}/${l}/reviews`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+      alternates: { languages: reviewLanguages },
+    });
+  }
   return entries;
 }

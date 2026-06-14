@@ -187,6 +187,27 @@ export async function GET(req: Request) {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS reviews (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        locale VARCHAR(5) NOT NULL,
+        rating TINYINT UNSIGNED NOT NULL,
+        title VARCHAR(120) NOT NULL,
+        body TEXT NOT NULL,
+        status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+        admin_note VARCHAR(255) NULL,
+        approved_by INT NULL,
+        approved_at TIMESTAMP NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_reviews_public (status, locale, approved_at),
+        INDEX idx_reviews_admin (status, created_at),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+
     // 2. Seed categories
     for (const slug of categorySlugs) {
       const swatch = SWATCH[slug] || null;
