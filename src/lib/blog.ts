@@ -31,7 +31,5 @@ export function getBlogPost(slug: string): BlogPost | undefined {
 }
 
 export function getAllBlogPosts(): BlogPost[] {
-  return [...blogPosts].sort(
-    (a, b) => new Date(b.published).getTime() - new Date(a.published).getTime()
-  );
+  return [...blogPosts];
 }
