@@ -11,7 +11,7 @@ type ReviewFormProps = {
 const copy = {
   en: {
     signInTitle: "Sign in to write a review",
-    signInBody: "Only registered members can submit WallMobi reviews. Reviews are published after admin approval.",
+    signInBody: "Only signed-in members can write WallMobi reviews, so feedback comes from real accounts.",
     signInButton: "Sign in or create account",
     formTitle: "Write your WallMobi review",
     rating: "Rating",
@@ -19,13 +19,13 @@ const copy = {
     titlePlaceholder: "Fast downloads and clean wallpapers",
     body: "Your review",
     bodyPlaceholder: "Tell other users what you liked, how you use WallMobi, and what could be improved.",
-    submit: "Submit for approval",
+    submit: "Submit review",
     submitting: "Submitting...",
-    success: "Review submitted. It will appear after admin approval.",
+    success: "Thank you. Your review has been submitted.",
   },
   th: {
     signInTitle: "เข้าสู่ระบบเพื่อเขียนรีวิว",
-    signInBody: "เฉพาะสมาชิกเท่านั้นที่ส่งรีวิว WallMobi ได้ รีวิวจะแสดงบนหน้าเว็บหลัง admin อนุมัติ",
+    signInBody: "เฉพาะสมาชิกที่เข้าสู่ระบบเท่านั้นที่เขียนรีวิว WallMobi ได้ เพื่อให้รีวิวมาจากบัญชีผู้ใช้จริง",
     signInButton: "เข้าสู่ระบบหรือสมัครสมาชิก",
     formTitle: "เขียนรีวิว WallMobi",
     rating: "คะแนน",
@@ -33,9 +33,9 @@ const copy = {
     titlePlaceholder: "ดาวน์โหลดเร็ว วอลเปเปอร์สวย ใช้ง่าย",
     body: "รีวิวของคุณ",
     bodyPlaceholder: "เล่าว่าชอบอะไร ใช้งาน WallMobi อย่างไร และอยากให้ปรับปรุงอะไร",
-    submit: "ส่งรีวิวเพื่อรออนุมัติ",
+    submit: "ส่งรีวิว",
     submitting: "กำลังส่ง...",
-    success: "ส่งรีวิวแล้ว รีวิวจะแสดงหลัง admin อนุมัติ",
+    success: "ขอบคุณครับ ส่งรีวิวเรียบร้อยแล้ว",
   },
 };
 

@@ -13,9 +13,9 @@ const content = {
     description:
       "Read member reviews for WallMobi, a free mobile wallpaper site with original downloads for signed-in members.",
     intro:
-      "These reviews come from registered WallMobi members. New reviews are checked by an admin before they are published.",
-    empty: "No approved reviews yet.",
-    reviewsTitle: "Approved member reviews",
+      "These reviews come from registered WallMobi members who use the site to find phone-ready wallpapers and original downloads.",
+    empty: "No member reviews yet.",
+    reviewsTitle: "Member reviews",
     home: "Home",
     crumb: "Reviews",
     seoTitle: "WallMobi Reviews: Is WallMobi Good for Free Mobile Wallpapers?",
@@ -28,9 +28,9 @@ const content = {
     description:
       "อ่านรีวิว WallMobi เว็บดาวน์โหลดวอลเปเปอร์มือถือฟรี สมาชิกสามารถดาวน์โหลดไฟล์ต้นฉบับแบบไม่มีลายน้ำได้",
     intro:
-      "รีวิวในหน้านี้มาจากสมาชิก WallMobi ที่ลงทะเบียนแล้ว รีวิวใหม่จะต้องผ่านการตรวจสอบจาก admin ก่อนแสดงบนหน้าเว็บ",
-    empty: "ยังไม่มีรีวิวที่อนุมัติ",
-    reviewsTitle: "รีวิวที่อนุมัติแล้ว",
+      "รีวิวในหน้านี้มาจากสมาชิก WallMobi ที่ใช้งานจริงเพื่อค้นหาวอลเปเปอร์มือถือและดาวน์โหลดไฟล์ต้นฉบับ",
+    empty: "ยังไม่มีรีวิวจากสมาชิก",
+    reviewsTitle: "รีวิวจากสมาชิก",
     home: "หน้าแรก",
     crumb: "รีวิว",
     seoTitle: "WallMobi ดีไหม สำหรับดาวน์โหลดวอลเปเปอร์มือถือฟรี",
@@ -158,7 +158,6 @@ export default async function ReviewsPage({ params }: { params: Promise<{ locale
         {averageRating && (
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", color: "var(--text-2)", fontWeight: 700 }}>
             <span>{averageRating.toFixed(1)} / 5</span>
-            <span>{reviews.length} {l === "th" ? "รีวิว" : "reviews"}</span>
           </div>
         )}
       </header>
