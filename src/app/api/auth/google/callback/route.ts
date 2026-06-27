@@ -52,11 +52,17 @@ export async function GET(req: Request) {
     // 2. Exchange code for Google Access & ID Tokens (including PKCE verifier)
     const tokenUrl = "https://oauth2.googleapis.com/token";
     const redirectUri = `${savedOrigin}/api/auth/google/callback`;
+    const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+
+    if (!clientId || !clientSecret) {
+      throw new Error("Missing Google OAuth environment variables");
+    }
     
     const tokenParams = new URLSearchParams({
       code,
-      client_id: process.env.GOOGLE_CLIENT_ID || "",
-      client_secret: process.env.GOOGLE_CLIENT_SECRET || "",
+      client_id: clientId,
+      client_secret: clientSecret,
       redirect_uri: redirectUri,
       grant_type: "authorization_code",
       code_verifier: savedVerifier,

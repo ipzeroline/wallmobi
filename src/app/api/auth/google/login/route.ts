@@ -61,7 +61,11 @@ export async function GET(req: Request) {
     // 4. Construct official Google OAuth 2.0 Auth Code URI
     const googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth";
     const redirectUri = `${requestOrigin}/api/auth/google/callback`;
-    const clientId = process.env.GOOGLE_CLIENT_ID || "";
+    const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+
+    if (!clientId) {
+      throw new Error("Missing GOOGLE_CLIENT_ID environment variable");
+    }
 
     const params = new URLSearchParams({
       client_id: clientId,
